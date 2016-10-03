@@ -1,0 +1,7 @@
+docker rm -f cc_flaskapp_cont
+docker build -t cc_flaskapp_2 .
+docker run -d --name cc_flaskapp_cont -v /var/run/docker.sock:/var/run/docker.sock -p 80:80 cc_flaskapp_2
+
+
+docker rm -f cc_flaskapp_cont
+docker logs cc_flaskapp_cont

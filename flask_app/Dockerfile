@@ -1,5 +1,5 @@
 #using tiangolos ubuntu,nginx,wsgi and flask image
-FROM tiangolo/uwsgi-nginx:python3.5
+FROM tiangolo/uwsgi-nginx:python2.7
 #Adding requirements to app directory and installing
 ADD requirements.txt /app/requirements.txt
 RUN pip install -r requirements.txt
