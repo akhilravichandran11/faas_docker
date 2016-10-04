@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+
+        <!-- Connection settings -->
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://db:5432/faas</property>
+        <property name="hibernate.connection.username">postgres</property>
+        <property name="hibernate.connection.password">root123#123</property>
+
+        <!-- SQL dialect -->
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+
+        <!-- Print executed SQL to stdout -->
+        <property name="show_sql">true</property>
+
+        <!-- Drop and re-create all database on startup -->
+        <property name="hibernate.hbm2ddl.auto">validate</property>
+
+        <!-- Annotated entity classes -->
+        <mapping class="com.cc.faas.dbmanager.rest.entity.UserEntity"/>
+        <mapping class="com.cc.faas.dbmanager.rest.entity.FunctionEntity"/>
+        <mapping class="com.cc.faas.dbmanager.rest.entity.RequestEntity"/>
+        
+    </session-factory>
+</hibernate-configuration>

@@ -1,0 +1,11 @@
+
+Commands used to create-
+Data Volume:
+docker create -v /var/lib/postgresql/data --name postgres-data busybox
+Db Container:
+docker run --name postgres -p 5432:5432 --restart=always -e POSTGRES_PASSWORD=root123#123 -d --volumes-from postgres-data postgres:9.3.6
+Execute this command to populate the Database: psql -U postgres -h localhost -f Schema.sql
+Copy dbmanager.war file after building(if there are any changes) to the directory containing DockerFile
+Execute: docker build -t madhat/tomcat .
+Execute: docker run --name dbmanager -d -p 8080:8080 --restart=always --link postgres:db madhat/tomcat
+After this, Postgres DB will be listening on 5432 and dbmanager would be listening on 8080 over http

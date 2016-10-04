@@ -1,0 +1,42 @@
+/dbManager/rest/users - Create, returns created object with id set
+
+{
+"userId":null,
+"userName":"abc",
+"password":"qwerty123"
+}
+
+For PUT same call with userId- same input as above, returns the updated object
+For delete, /dbManager/rest/users/{userId} - deletes and returns no content if successful
+3 types of GET - /dbManager/rest/users - All users(json array), /dbManager/rest/users/{username}-Returns first occurence of user, /dbManager/rest/users/{userId} - Returns the same object
+If there is an exception, a json object of the format-{"errorMessage":"Content of the error message"} will be returned
+
+/dbManager/rest/functions - Create, returns created object with id set
+
+{
+  "functionId":null,
+  "functionName":"abcKaFunction",
+  "functionContent":"abcKaFunctionContent",
+  "creator":{"userId":"31D95AE4-E4C2-4704-AA45-15CBC02AD027", "userName":"abc","password":"qwerty123"}
+}
+For PUT same call with functionId- same input as above, returns the updated object
+For delete, /dbManager/rest/functions/{functionId} - deletes and returns no content if successful
+2 types of GET - /dbManager/rest/functions - All functions(json array), /dbManager/rest/functions/{functionId}-Returns function with that id
+If there is an exception, a json object of the format-{"errorMessage":"Content of the error message"} will be returned
+
+
+/dbManager/rest/request - Create, returns created object with id set
+
+{
+  "requestId":null,
+  "requestType":"Create User",
+  "requestStatus":"Starting",
+  "requestParameters":"{\"abc\":\"123\",\"xyz\":\"1234\"}",
+  "result":"Still calculating",
+  "requestor":{"password":"qwerty123","userName":"abc","userId":"31D95AE4-E4C2-4704-AA45-15CBC02AD027"}
+}
+
+For PUT same call with requestId- same input as above, returns the updated object
+For delete, /dbManager/rest/request/{requestId} - deletes and returns no content if successful
+2 types of GET - /dbManager/rest/request - All requests(json array), /dbManager/rest/request/{requestId}-Returns request with that id
+If there is an exception, a json object of the format-{"errorMessage":"Content of the error message"} will be returned
