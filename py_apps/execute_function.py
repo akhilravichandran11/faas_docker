@@ -31,7 +31,7 @@ def get_request_db(request_id_arg, db_ip_ddress_arg)
                 #put_request_db(request_id_arg, db_ip_ddress_arg, 'CreationFailed')
         response_req = json.load(resp.json())
 
-        if response_req['type'] is 'create_function'
+        if response_req['type'] is 'execute_function'
                 #print request NOK
                 return -1
         else
@@ -42,21 +42,17 @@ def get_request_db(request_id_arg, db_ip_ddress_arg)
 ##########################################################
 #requesting API to save tehfunction and its contents to DB
 ##########################################################
-def post_function_create_db(db_ip_ddress_arg, userid_json_arg,  **parameter_arg)
+def get_function_db(db_ip_ddress_arg, function_id_arg)
 	#generating API for getting Function Created
-	get_request_api = 'http://' + db_ip_ddress_arg + '/function/'
-	 resp = requests.post(get_request_api,json={
-        'name': parameter_arg.get("name"),
-	'content': parameter_arg.get("content"),
-	'userid': userid_json_arg,
-        })
+	get_request_api = 'http://' + db_ip_ddress_arg + '/function/' + function_id_arg
+	 resp = requests.get(get_request_api)
         if resp.status_code != 200:
                 # This means something went wrong.
                 print('GET /request/ {}'.format(resp.status_code))
 		return -1
         else:
 		print('GET /request/ {}'.format(resp.status_code))
-		return 0
+		return resp.json()
 
 ##########################################################
 #requesting API to get user datad from DB Service
@@ -79,15 +75,15 @@ def get_user_db(db_ip_ddress_arg, userid_arg)
 ##########################################################
 #Creation and compilation of the function
 ##########################################################
-def create_function(resp_req_params_arg)
-	str = " "
-	if len(resp_req_params_arg) > 1:
-		for value in range(2,len(resp_req_params_arg)):
-			str = str + resp_req_params_arg[value] + " "
+def execute_function(resp_req_params_arg)
+	#str = " "
+	#if len(resp_req_params_arg) > 1:
+	#	for value in range(2,len(resp_req_params_arg)):
+	#		str = str + resp_req_params_arg[value] + " "
 	#Dump this code in file
-	fobj  = open(temp_file, "w+")
-	fobj.write(resp_req_params_arg[1])
-	fobj.close
+	#fobj  = open(temp_file, "w+")
+	#fobj.write(resp_req_params_arg[1])
+	#fobj.close
 
 	#exec this file and check output - malkiyat - set return code = 1, failure, 0 for success.
 	
