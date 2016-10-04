@@ -86,7 +86,7 @@ def create_function(resp_req_params_arg)
 			str = str + resp_req_params_arg[value] + " "
 	#Dump this code in file
 	fobj  = open(temp_file, "w+")
-	fobj.write(resp_req_params_arg[1])
+	fobj.write(resp_req_params_arg[2])
 	fobj.close
 
 	#exec this file and check output - malkiyat - set return code = 1, failure, 0 for success.
@@ -134,7 +134,7 @@ else:
 		put_request_db(request_id, db_ip_ddress, 'RequestFailed')
 		return 1
 	else:
-		ret_post_func = post_function_create_db(db_ip_ddress, ret_user_get, name = resp_req_params[1], content = json.dumps(resp_req_params))
+		ret_post_func = post_function_create_db(db_ip_ddress, ret_user_get, name = resp_req_params[1], content = resp_req_params[2])
 		if ret_post_func == -1:
 			put_request_db(request_id, db_ip_ddress, 'RequestFailed')
 			return 1
