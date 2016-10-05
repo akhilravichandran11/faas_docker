@@ -15,12 +15,15 @@ import com.cc.faas.dbmanager.rest.pojo.User;
 
 public class RequestServiceImpl {
 	private RequestDaoImpl requestDao = new RequestDaoImpl();
-	private UserDaoImpl userDao = new UserDaoImpl();
+	private static UserDaoImpl userDao = new UserDaoImpl();
 
 	public Request createRequest(Request requestToCreate) throws Exception {
-		UserEntity requestor = userDao.findById(requestToCreate.getRequestor().getUserId());
+		UserEntity requestor=null;
+		if(requestToCreate.getRequestor()!=null && requestToCreate.getRequestor().getUserId()!=null &&!requestToCreate.getRequestor().getUserId().isEmpty()){
+		requestor = userDao.findById(requestToCreate.getRequestor().getUserId());
 		if(requestor==null){
 			throw new Exception(ExceptionConstants.ID_NOT_IN_DB);
+		}
 		}
 		RequestEntity requestEntity = fromDto(requestToCreate,requestor);
 		requestDao.createRequest(requestEntity);
@@ -31,9 +34,12 @@ public class RequestServiceImpl {
 		if(entityInDb==null){
 			throw new Exception(ExceptionConstants.ID_NOT_IN_DB);
 		}
-		UserEntity requestor = userDao.findById(requestToUpdate.getRequestor().getUserId());
+		UserEntity requestor=null;
+		if(requestToUpdate.getRequestor()!=null && requestToUpdate.getRequestor().getUserId()!=null &&!requestToUpdate.getRequestor().getUserId().isEmpty()){
+		requestor = userDao.findById(requestToUpdate.getRequestor().getUserId());
 		if(requestor==null){
 			throw new Exception(ExceptionConstants.ID_NOT_IN_DB);
+		}
 		}
 		RequestEntity requestEntity = fromDto(requestToUpdate,requestor);
 		requestDao.updateRequest(requestEntity);
@@ -77,14 +83,24 @@ public class RequestServiceImpl {
 		entity.setResult(request.getResult());
 		entity.setStatus(request.getRequestStatus());
 		entity.setType(request.getRequestType());
-		entity.setUser(requestor);
+		if(requestor!=null){
+		entity.setUserid(requestor.getId());;
+		}
 		return entity;
 	}
 	public static Request toDto(RequestEntity entity){
 		Request request = new Request();
-		User requestor = UserServiceImpl.toDto(entity.getUser());
-		request.setRequestId(entity.getId());
+		if(entity.getUserid()!=null && !entity.getUserid().isEmpty()){
+		UserEntity requestorEntity=null;
+		try {
+			requestorEntity = userDao.findById(entity.getUserid());
+		} catch (Exception e) {
+			//Do nothing; Return what could be retrieved
+		}
+		User requestor = UserServiceImpl.toDto(requestorEntity);
 		request.setRequestor(requestor);
+		}
+		request.setRequestId(entity.getId());
 		request.setRequestParameters(entity.getParameter());
 		request.setRequestStatus(entity.getStatus());
 		request.setRequestType(entity.getType());

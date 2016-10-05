@@ -4,17 +4,11 @@ import java.io.Serializable;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table(name = "request", catalog = "faas",schema="public")
@@ -26,7 +20,7 @@ public class RequestEntity implements Serializable {
 	private String parameter;
 	private String status;
 	private String result;
-	private UserEntity user;
+	private String userid;
 	
 	@Id
 	@Column(name = "id")
@@ -68,13 +62,12 @@ public class RequestEntity implements Serializable {
 	public void setResult(String result) {
 		this.result = result;
 	}
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "userid", referencedColumnName="id")
-	@Fetch(FetchMode.SELECT)
-	public UserEntity getUser() {
-		return user;
+	@Column(name = "userid")
+	public String getUserid() {
+		return userid;
 	}
-	public void setUser(UserEntity user) {
-		this.user = user;
+	public void setUserid(String userid) {
+		this.userid = userid;
 	}
+	
 }

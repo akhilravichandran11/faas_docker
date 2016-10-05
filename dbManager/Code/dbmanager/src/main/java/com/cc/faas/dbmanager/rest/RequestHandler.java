@@ -58,7 +58,7 @@ public class RequestHandler {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createRequest(Request request) {
-		if(request==null||request.getRequestor()==null||request.getRequestor().getUserId()==null||request.getRequestor().getUserId().isEmpty()||request.getRequestType()==null||request.getRequestType().isEmpty()){
+		if(request==null||request.getRequestType()==null||request.getRequestType().isEmpty()){
 			return Response.status(Status.BAD_REQUEST).entity(Helper.convertToJsonString(new Message(ExceptionConstants.NULL_EMPTY_INPUT))).build();
 		}
 		try{
@@ -74,7 +74,7 @@ public class RequestHandler {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateRequest(Request request) {
-		if(request==null||request.getRequestId()==null||request.getRequestId().isEmpty()||request.getRequestor()==null||request.getRequestor().getUserId()==null||request.getRequestor().getUserId().isEmpty()||request.getRequestType()==null||request.getRequestType().isEmpty()){
+		if(request==null||request.getRequestId()==null||request.getRequestId().isEmpty()||request.getRequestType()==null||request.getRequestType().isEmpty()){
 			return Response.status(Status.BAD_REQUEST).entity(Helper.convertToJsonString(new Message(ExceptionConstants.NULL_EMPTY_INPUT))).build();
 		}
 		try{
