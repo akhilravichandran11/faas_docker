@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 docker_client = docker.Client(base_url='unix://var/run/docker.sock')
 
-db_manager_url = "http://192.168.1.9:8080"
+db_manager_url = "http://dbmanager:8080"
 
 db_manager_url_api = {
     "request":{
@@ -31,7 +31,7 @@ def request_check_status(request_id):
     try:
         request_check_status_url = db_manager_url + db_manager_url_api["request"]["check_status"] + request_id
         # request_obj = requests.get(request_check_status_url)
-        request_obj = requests.get('http://192.168.1.9:8080/dbmanager/rest/request/B8323A57-AA95-4C91-AFE7-60E9A748A4E5')
+        request_obj = requests.get('http://dbmanager:8080/dbmanager/rest/request/B8323A57-AA95-4C91-AFE7-60E9A748A4E5')
         resp = str(request_obj.status_code)
         # resp = custom_util.return_request_response(request_obj)
     except Exception as e:
