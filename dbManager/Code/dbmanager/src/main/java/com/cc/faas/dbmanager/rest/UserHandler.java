@@ -113,4 +113,21 @@ public class UserHandler {
 			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Helper.convertToJsonString(new Message(ex.getMessage()))).build();
 		}
 	}
+	@POST
+	@Path("/auth")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response authenticateUser(User user) {
+		if(user==null||user.getUserName()==null || user.getUserName().isEmpty() || user.getPassword()==null || user.getPassword().isEmpty()){
+			return Response.status(Status.BAD_REQUEST).entity(Helper.convertToJsonString(new Message(ExceptionConstants.INVALID_CREDENTIALS))).build();
+		}
+		try{
+			userService.authenticateUser(user);
+			return Response.status(Status.NO_CONTENT).build();
+		}catch(Exception ex){
+			if(Helper.checkBadRequest(ex)){
+				return Response.status(Status.BAD_REQUEST).entity(Helper.convertToJsonString(new Message(ExceptionConstants.INVALID_CREDENTIALS))).build();
+			}
+			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Helper.convertToJsonString(new Message(ex.getMessage()))).build();
+		}
+	}
 }

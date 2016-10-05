@@ -66,6 +66,15 @@ public class UserServiceImpl {
 		}
 		return users;
 	}
+	public void authenticateUser(User userToAuthenticate) throws Exception {
+		UserEntity entityInDb=userDao.findByName(userToAuthenticate.getUserName());
+		if(entityInDb == null){
+			throw new Exception(ExceptionConstants.ID_NOT_IN_DB);
+		}
+		if(entityInDb.getPassword().equals(userToAuthenticate.getPassword())){
+			throw new Exception(ExceptionConstants.ID_NOT_IN_DB);
+		}
+	}
 	public static UserEntity fromDto(User user) {
 		UserEntity entity = new UserEntity();
 		if(user.getUserId()!=null && !user.getUserId().isEmpty()){
@@ -81,7 +90,6 @@ public class UserServiceImpl {
 		User user = new User();
 		user.setUserId(entity.getId());
 		user.setUserName(entity.getName());
-		user.setPassword(entity.getPassword());
 		return user;
 	}
 }

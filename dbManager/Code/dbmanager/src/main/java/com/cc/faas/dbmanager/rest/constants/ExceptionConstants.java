@@ -6,4 +6,5 @@ public class ExceptionConstants {
 	public static String NAME_NOT_EXIST="Object with the name does not exist";
 	public static String ID_NOT_EXIST="Object with the id does not exist";
 	public static String NULL_EMPTY_INPUT="Input contains empty or null parameters";
+	public static String INVALID_CREDENTIALS="Invalid credentials";
 }
