@@ -1,4 +1,8 @@
 #!/usr/bin/python
+import sys
+import os
+import requests
+import json
 
 def custom_print(obj,sepeartor = '\n'):
 	if type(obj) is dict:
@@ -22,3 +26,15 @@ def custom_print_dict(obj,sepeartor = '\n'):
 		final_string.append(current_string)
 	final_string.append("#"*10)
 	return ("%s" % sepeartor).join(final_string)
+
+def return_request_response(request_obj):
+	response_json = None
+	if request_obj.status_code == 200 && request_obj.json() is not None :
+		response_json = request_obj.json()
+	else :
+		data = {
+			"json_data" : None
+		}
+		response_json = json.dumps(data)
+	resp = Response(response_json, status=request_obj.status_code, mimetype='application/json')
+	return resp

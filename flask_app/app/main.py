@@ -1,6 +1,11 @@
+import sys
+import os
 from flask import Flask
 import docker
 import logging
+import requests
+import json
+
 import custom_util
 
 app = Flask(__name__)
@@ -11,7 +16,7 @@ db_manager_url = "http://192.168.1.9:8080"
 
 db_manager_url_api = {
     "request":{
-    "check_status": "dbmanager/rest/request"
+    "check_status": "/dbmanager/rest/request/"
     }
 }
 
@@ -22,9 +27,13 @@ def hello():
 
 @app.route("/request/check_status/<string:request_id>" , methods = ['GET'] )
 def request_check_status():
-
-
-    
+    try:
+        request_check_status_url = db_manager_url + db_manager_url_api["request"]["check_status"] + request_id
+        request_obj = requests.get(request_check_status_url)
+        resp = custom_util.return_request_response(request_obj)
+    except Exception as e:
+        resp = str(e)
+    return response
 
 @app.route("/containers/list")    
 def containers():
