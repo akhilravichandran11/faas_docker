@@ -1,7 +1,18 @@
 docker rm -f cc_flaskapp_cont
-docker build -t cc_flaskapp_2 .
-docker run -d --name cc_flaskapp_cont -v /var/run/docker.sock:/var/run/docker.sock -p 80:80 cc_flaskapp_2
+docker build -t cc_flaskapp .
+docker run -d --name cc_flaskapp_cont -v /var/run/docker.sock:/var/run/docker.sock -p 80:80 -p 8080 cc_flaskapp
 
 
 docker rm -f cc_flaskapp_cont
 docker logs cc_flaskapp_cont
+
+
+docker run --name dbmanager -d -p 8080:8080 --restart=always --link postgres:db madhat/tomcat
+
+docker rm -f dbmanager
+docker run --name dbmanager -d -p 8080:8080 --expose=8080 --restart=always --link postgres:db madhat/tomcat
+
+docker rm -f cc_dbmpy_cont
+docker build -t cc_dbmpy .
+docker run --name cc_dbmpy_cont --link dbmanager:dbmanageralias cc_dbmpy
+docker run --name cc_dbmpy_cont --expose=8080 --link dbmanager:dbmanageralias cc_dbmpy

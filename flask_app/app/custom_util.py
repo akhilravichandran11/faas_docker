@@ -29,7 +29,7 @@ def custom_print_dict(obj,sepeartor = '\n'):
 
 def return_request_response(request_obj):
 	response_json = None
-	if request_obj.status_code == 200 && request_obj.json() is not None :
+	if (request_obj.status_code == 200 ) and (request_obj.json() is not None) :
 		response_json = request_obj.json()
 	else :
 		data = {
