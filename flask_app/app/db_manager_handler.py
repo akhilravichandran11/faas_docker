@@ -6,6 +6,7 @@ import json
 
 db_manager_url_api = {
     "request":{
+    "create_request_id": "/dbmanager/rest/request/"
     "check_status": "/dbmanager/rest/request/"
     },
     "user":{
@@ -18,6 +19,17 @@ db_manager_url_api = {
 class Dbmanager:
 	def __init__(self,root_url):
 		self.root_url = root_url
+
+	def get_request_id(request_type , request_parameters, result , request_status):
+		required_url = self.root_url + db_manager_url_api["request"]["check_status"] + request_id
+		data = {
+  				"requestType": request_type,
+                "requestStatus": request_status,
+                "requestParameters":request_parameters
+			}
+		data_json = json.dumps(data)
+        headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+		req_obj = requests.post(required_url , data = data_json , headers = headers )
 
 	def request_check_status(request_id):
 		required_url = self.root_url + db_manager_url_api["request"]["check_status"] + request_id
@@ -47,7 +59,7 @@ class Dbmanager:
 				"success" = False
 			}
 		resp_json = json.dumps(data)
-		resp = Response(resp_json, status=req_obj.status_code, mimetype='application/json')
+		resp = Response(resp_json, status = req_obj.status_code, mimetype ='application/json')
 		return resp
 
 

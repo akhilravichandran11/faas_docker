@@ -1,6 +1,6 @@
 import sys
 import os
-from flask import Flask
+from flask import Flask, render_template, request, jsonify
 import docker
 import logging
 import requests
@@ -36,7 +36,15 @@ def request_check_status(request_id):
     return resp
 
 @app.route("/user/create" , methods = ['POST'])
-def user_create(): 
+def user_create():
+    resp = ""
+    req_json = request.json()
+    resp = str(req_json)
+    try:
+        # resp = dbmanager.user_create(username,password)
+    except Exception as e:
+        resp = str(e)
+    return resp
 
 @app.route("/containers/list")    
 def containers():
