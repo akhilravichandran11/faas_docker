@@ -39,7 +39,6 @@ def request_check_status(request_id):
 def user_create():
     resp = ""
     req_json = request.json()
-    resp = str(req_json)
     try:
         # resp = dbmanager.user_create(username,password)
     except Exception as e:
