@@ -7,18 +7,19 @@ import requests
 import json
 
 import custom_util
+import db_manager_handler
 
 app = Flask(__name__)
 
-docker_client = docker.Client(base_url='unix://var/run/docker.sock')
 
+#  URLS for talking to docker containers
 db_manager_url = "http://dbmanager:8080"
 
-db_manager_url_api = {
-    "request":{
-    "check_status": "/dbmanager/rest/request/"
-    }
-}
+
+#  Objects Initiated for lifecycle of flask app
+docker_client = docker.Client(base_url='unix://var/run/docker.sock')
+dbmanager = Dbmanager(db_manager_url)
+
 
 @app.route("/")
 def hello():
@@ -29,14 +30,13 @@ def hello():
 def request_check_status(request_id):
     resp = ""
     try:
-        request_check_status_url = db_manager_url + db_manager_url_api["request"]["check_status"] + request_id
-        # request_obj = requests.get(request_check_status_url)
-        request_obj = requests.get('http://192.168.1.9:8080/dbmanager/rest/request/B8323A57-AA95-4C91-AFE7-60E9A748A4E5')
-        resp = str(request_obj.status_code)
-        # resp = custom_util.return_request_response(request_obj)
+        resp = dbmanager.request_check_status(request_id)
     except Exception as e:
         resp = str(e)
     return resp
+
+@app.route("/user/create" , methods = ['POST'])
+def user_create(): 
 
 @app.route("/containers/list")    
 def containers():
@@ -48,11 +48,11 @@ def containers():
         log_result = str(e)
     return  log_result
 
-@app.route('/containers/logs/<variable>' , methods = ['GET'] )
-def container_logs(variable):
+@app.route('/containers/logs/<string:container_id>' , methods = ['GET'] )
+def container_logs(container_id):
     log_result = ""
     try:
-        log_result = docker_client.logs(variable).replace("\n","<br>")
+        log_result = docker_client.logs(container_id).replace("\n","<br>")
     except Exception as e:
         log_result =  str(e)
     return log_result
