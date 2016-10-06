@@ -8,7 +8,7 @@ Nginix/Python/Flask FAAS API Setup :
 
 Docker CLI commands for executing microservices :
     - Microservices like Create User, Create Function , Execute Function(These commands will be executed though Docker-py(Dockers Python API) from the FAAS web app)
-  1 - Build required image after building docker file
+1. Build required image after building docker file
     - docker build -t cc_create_user_123456 .
-  2 - Create Docker Service through swarm manager using created image and have Service's network as host
+2. Create Docker Service through swarm manager using created image and have Service's network as host
     - docker service create --name cc_create_user_123456_cont --network host cc_create_user_123456
