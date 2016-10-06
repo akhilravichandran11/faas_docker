@@ -71,7 +71,7 @@ public class UserServiceImpl {
 		if(entityInDb == null){
 			throw new Exception(ExceptionConstants.ID_NOT_IN_DB);
 		}
-		if(entityInDb.getPassword().equals(userToAuthenticate.getPassword())){
+		if(!entityInDb.getPassword().equals(userToAuthenticate.getPassword())){
 			throw new Exception(ExceptionConstants.ID_NOT_IN_DB);
 		}
 	}
