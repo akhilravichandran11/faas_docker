@@ -82,9 +82,9 @@ public class UserHandler {
 			return Response.status(Status.CREATED).entity(Helper.convertToJsonString(createdUser)).build();
 		}catch(Exception ex){
 			if(Helper.checkBadRequest(ex)){
-				return Response.status(Status.BAD_REQUEST).entity(Helper.convertToJsonString(new Message(ex.getMessage()))).build();
+				return Response.status(Status.BAD_REQUEST).entity(Helper.convertToJsonString(new Message(ex.getMessage() + "Dude 1"))).build();
 			}
-			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Helper.convertToJsonString(new Message(ex.getMessage()))).build();
+			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Helper.convertToJsonString(new Message(ex.getMessage() + "Dude 2"))).build();
 		}
 	}
 	@PUT

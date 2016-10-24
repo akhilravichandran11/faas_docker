@@ -20,3 +20,6 @@ docker run --name cc_dbmpy_cont --link dbmanager:dbmanager cc_dbmpy
 docker run --name cc_dbmpy_cont --network host cc_dbmpy
 
 docker service create --name sw_cc_dbmpy_cont cc_dbmpy
+
+remove all exited containers
+docker ps -a | grep Exit | cut -d ' ' -f 1 | xargs sudo docker rm

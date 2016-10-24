@@ -1,15 +1,16 @@
 #!/usr/bin/python
 from docker import Client
-import custom_util
-client = Client(base_url='unix://var/run/docker.sock')
+import datetime
 
-containerz = client.containers()
-#containerz = [ {1:"a","c":"d"},{2:"z","x":"y"}]
+docker_client = Client(base_url='unix://var/run/docker.sock')
 
-#print custom_util.custom_print(containerz)
-try :
-	print client.inspect_container("cc_flak")
-except Exception as e:
-	print e.message
-#print client.logs("cc_flaskapp_cont1")
+docker_image_name = 'cc_test_print'
+dt_now = datetime.datetime.now()
+docker_container_name = docker_image_name + dt_now.strftime('_cont_%m.%d.%Y_')
 
+for i in range(1,5):
+  current_container = docker_client.create_container(image = docker_image_name  , name = (docker_container_name + str(i)))
+  docker_client.start(current_container)
+#  
+#for i in range(1,5):
+#  current_container = docker_client.remove_container((docker_container_name + str(i)))
