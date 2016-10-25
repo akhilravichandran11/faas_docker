@@ -22,6 +22,10 @@ public class FunctionServiceImpl {
 		if(creator==null){
 			throw new Exception(ExceptionConstants.ID_NOT_IN_DB);
 		}
+		FunctionEntity entityInDb = functionDao.findByNameAndUserId(creator.getId(), functionToCreate.getFunctionName());
+		if(entityInDb!=null){
+			throw new Exception(ExceptionConstants.NAME_IN_DB);
+		}
 		FunctionEntity functionEntity = fromDto(functionToCreate,creator);
 		functionDao.createFunction(functionEntity);
 		return toDto(functionDao.findById(functionEntity.getId()));

@@ -75,6 +75,31 @@ public class FunctionDaoImpl {
 		return allEntities;
 	}
 	
+	public FunctionEntity findByNameAndUserId(String userid,String functionName) throws Exception {
+		FunctionEntity foundEntity=null;
+		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+		Session session = sessionFactory.openSession();
+		Transaction tx=null;
+		try {
+			tx= session.beginTransaction();
+			Query query = session.createQuery("from FunctionEntity where user.id = :userid and name = :functionname");
+			query.setParameter("userid", userid);
+			query.setParameter("functionname", functionName);
+			@SuppressWarnings("unchecked")
+			List<FunctionEntity> list = (List<FunctionEntity>)query.list();
+			if(list != null && !list.isEmpty())
+			foundEntity=list.get(0);
+			tx.commit();
+		} catch(Exception e) {
+			if(tx!=null)
+				tx.rollback();
+			throw e;
+		} finally{
+			session.close();
+		}
+		return foundEntity;
+	}
+	
 	public void updateFunction(FunctionEntity functionToUpdate) throws Exception {
 		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 		Session session = sessionFactory.openSession();
