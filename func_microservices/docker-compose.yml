@@ -1,0 +1,4 @@
+cc_user_create:
+  build: ./user_create/.
+cc_user_update:
+  build: ./user_update/.

@@ -10,9 +10,7 @@
         <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
         <property name="hibernate.connection.url">jdbc:postgresql://db:5432/faas</property>
         <property name="hibernate.connection.username">postgres</property>
-        <!-- <property name="hibernate.connection.username">ravichandran</property> -->
         <property name="hibernate.connection.password">root123#123</property>
-        <!-- <property name="hibernate.connection.password">postgres</property> -->
 
         <!-- SQL dialect -->
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
