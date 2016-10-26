@@ -1,0 +1,7 @@
+docker build -t cc_user_create --rm ./user/create/.
+docker build -t cc_user_update --rm ./user/update/.
+docker build -t cc_user_delete --rm ./user/delete/.
+
+docker build -t cc_function_create --rm ./function/create/.
+docker build -t cc_function_update --rm ./function/update/.
+docker build -t cc_function_delete --rm ./function/delete/.

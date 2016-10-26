@@ -261,8 +261,7 @@ class Dbmanager:
                 "functionId": None,
                 "functionName": function_name,
                 "functionContent": function_content,
-                "creator": {"userId": user_id,
-                            "userName": user_name},
+                "creator": creator_data,
                 "requestStatus": "Function Creation Failed - Function Name Already Taken - " + str(request_obj.text),
                 "result": "failure"
             }
@@ -271,8 +270,7 @@ class Dbmanager:
                 "functionId": None,
                 "functionName": function_name,
                 "functionContent": function_content,
-                "creator": {"userId": user_id,
-                            "userName": user_name},
+                "creator": creator_data,
                 "requestStatus": "Function Creation Failed - " + str(request_obj.text),
                 "result": "failure"
             }
@@ -287,7 +285,6 @@ class Dbmanager:
                 "functionContent": function_content,
                 "creator": creator_data
                 }
-        data1 = json.dumps(data)
         headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
         request_obj = requests.put(required_url, data=json.dumps(data), headers=headers)
 
@@ -307,8 +304,7 @@ class Dbmanager:
                 "functionId": function_id,
                 "functionName": function_name,
                 "functionContent": function_content,
-                "creator": {"userId": user_id,
-                            "userName": user_name},
+                "creator": creator_data,
                 "requestStatus": "Function Updated Failed - functionId Not Present - " + str(
                     request_obj.text),
                 "result": "failure"
@@ -318,8 +314,7 @@ class Dbmanager:
                 "functionId": None,
                 "functionName": function_name,
                 "functionContent": function_content,
-                "creator": {"userId": user_id,
-                            "userName": user_name},
+                "creator": creator_data,
                 "requestStatus": "Function Update Failed - " + str(request_obj.text),
                 "result": "failure"
             }

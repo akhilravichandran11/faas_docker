@@ -96,10 +96,10 @@ def user_update():
                     "USER_NAME" : request_args["userName"],
                     "PASSWORD": request_args["password"]
                 }
-                resp = dbmanager.user_update(data["USER_ID"],data["USER_NAME"],data["PASSWORD"])
-                # host_config = docker_client.create_host_config(privileged = False, network_mode = 'host')
-                # current_container = docker_client.create_container(image = docker_image_name  , name = docker_container_name , environment = data , host_config = host_config)
-                # docker_client.start(current_container)
+                # resp = dbmanager.user_update(data["USER_ID"],data["USER_NAME"],data["PASSWORD"])
+                host_config = docker_client.create_host_config(privileged = False, network_mode = 'host')
+                current_container = docker_client.create_container(image = docker_image_name  , name = docker_container_name , environment = data , host_config = host_config)
+                docker_client.start(current_container)
             else:
                 resp = custom_util.build_response_for_missing_params(request_types[request_type],required_arg_keys)
     except Exception as e:
@@ -121,14 +121,15 @@ def user_delete():
                 data = {
                     "ROOT_URL": db_manager_url,
                     "API_URLS": api_urls,
+                    "STATUS_CODES": status_codes,
                     "REQUEST_ID": response_data["requestId"],
                     "REQUEST_TYPE": request_type,
                     "USER_ID": request_args["userId"]
                 }
-                resp = dbmanager.user_delete(data["USER_ID"])
-                # host_config = docker_client.create_host_config(privileged = False, network_mode = 'host')
-                # current_container = docker_client.create_container(image = docker_image_name  , name = docker_container_name , environment = data , host_config = host_config)
-                # docker_client.start(current_container)
+                # resp = dbmanager.user_delete(data["USER_ID"])
+                host_config = docker_client.create_host_config(privileged = False, network_mode = 'host')
+                current_container = docker_client.create_container(image = docker_image_name  , name = docker_container_name , environment = data , host_config = host_config)
+                docker_client.start(current_container)
         else:
             resp = custom_util.build_response_for_missing_params(request_types[request_type], required_arg_keys)
     except Exception as e:
@@ -151,6 +152,7 @@ def function_create():
                 data = {
                     "ROOT_URL": db_manager_url,
                     "API_URLS": api_urls,
+                    "STATUS_CODES": status_codes,
                     "REQUEST_ID": response_data["requestId"],
                     "REQUEST_TYPE": request_type,
                     "USER_ID" : request_args["userId"],
@@ -158,10 +160,10 @@ def function_create():
                     "FUNCTION_NAME" : request_args["functionName"],
                     "FUNCTION_CONTENT" : request.data
                 }
-                resp = dbmanager.function_create(data["FUNCTION_NAME"],data["FUNCTION_CONTENT"],data["USER_ID"],data["USER_NAME"])
-                # host_config = docker_client.create_host_config(privileged = False, network_mode = 'host')
-                # current_container = docker_client.create_container(image = docker_image_name  , name = docker_container_name , environment = data , host_config = host_config)
-                # docker_client.start(current_container)
+                # resp = dbmanager.function_create(data["FUNCTION_NAME"],data["FUNCTION_CONTENT"],data["USER_ID"],data["USER_NAME"])
+                host_config = docker_client.create_host_config(privileged = False, network_mode = 'host')
+                current_container = docker_client.create_container(image = docker_image_name  , name = docker_container_name , environment = data , host_config = host_config)
+                docker_client.start(current_container)
         else:
             resp = custom_util.build_response_for_missing_params(request_types[request_type], required_arg_keys)
     except Exception as e:
@@ -183,6 +185,7 @@ def function_update():
                 data = {
                     "ROOT_URL": db_manager_url,
                     "API_URLS": api_urls,
+                    "STATUS_CODES": status_codes,
                     "REQUEST_ID": response_data["requestId"],
                     "REQUEST_TYPE": request_type,
                     "USER_ID" : request_args["userId"],
@@ -191,10 +194,10 @@ def function_update():
                     "FUNCTION_NAME" : request_args["functionName"],
                     "FUNCTION_CONTENT" : request.data
                 }
-                resp = dbmanager.function_update(data["FUNCTION_ID"],data["FUNCTION_NAME"],data["FUNCTION_CONTENT"],data["USER_ID"],data["USER_NAME"])
-                # host_config = docker_client.create_host_config(privileged = False, network_mode = 'host')
-                # current_container = docker_client.create_container(image = docker_image_name  , name = docker_container_name , environment = data , host_config = host_config)
-                # docker_client.start(current_container)
+                # resp = dbmanager.function_update(data["FUNCTION_ID"],data["FUNCTION_NAME"],data["FUNCTION_CONTENT"],data["USER_ID"],data["USER_NAME"])
+                host_config = docker_client.create_host_config(privileged = False, network_mode = 'host')
+                current_container = docker_client.create_container(image = docker_image_name  , name = docker_container_name , environment = data , host_config = host_config)
+                docker_client.start(current_container)
         else:
             resp = custom_util.build_response_for_missing_params(request_types[request_type], required_arg_keys)
     except Exception as e:
@@ -216,14 +219,15 @@ def function_delete():
                 data = {
                     "ROOT_URL": db_manager_url,
                     "API_URLS": api_urls,
+                    "STATUS_CODES": status_codes,
                     "REQUEST_ID": response_data["requestId"],
                     "REQUEST_TYPE": request_type,
                     "FUNCTION_ID": request_args["functionId"]
                 }
-                resp = dbmanager.function_delete(data["FUNCTION_ID"])
-                # host_config = docker_client.create_host_config(privileged = False, network_mode = 'host')
-                # current_container = docker_client.create_container(image = docker_image_name  , name = docker_container_name , environment = data , host_config = host_config)
-                # docker_client.start(current_container)
+                # resp = dbmanager.function_delete(data["FUNCTION_ID"])
+                host_config = docker_client.create_host_config(privileged = False, network_mode = 'host')
+                current_container = docker_client.create_container(image = docker_image_name  , name = docker_container_name , environment = data , host_config = host_config)
+                docker_client.start(current_container)
         else:
             resp = custom_util.build_response_for_missing_params(request_types[request_type], required_arg_keys)
     except Exception as e:
