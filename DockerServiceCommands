@@ -1,0 +1,38 @@
+import docker.types
+from docker import Client
+cli = Client(base_url='unix://var/run/docker.sock')
+container_spec = docker.types.ContainerSpec(image='madhat/test')
+task_tmpl = docker.types.TaskTemplate(container_spec)
+service_id = cli.create_service(task_tmpl, name='swarm_test',networks=[networking_config])
+networking_config = cli.create_networking_config({'host':cli.create_endpoint_config()})
+For creating registry
+mkdir -p auth
+touch auth/htpasswd
+chmod 666 auth/htpasswd
+docker run --rm -it \
+  -v `pwd`/auth:/auth \
+  --entrypoint htpasswd registry:2 -B /auth/htpasswd $USER
+Password:123456
+chmod 444 auth/htpasswd
+docker run -d -p 5000:5000 --restart=always --name registry \
+  -v `pwd`/auth/htpasswd:/auth/htpasswd:ro \
+  -v `pwd`/registry:/var/lib/registry \
+  -e "REGISTRY_AUTH=htpasswd" \
+  -e "REGISTRY_AUTH_HTPASSWD_REALM=Local Registry" \
+  -e "REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd" \
+  -e "REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY=/var/lib/registry" \
+  registry:2
+
+# then push your image
+docker login localhost:5000
+docker tag madhat/test localhost:5000/madhat/test
+docker push localhost:5000/madhat/test
+On each of the nodes:
+    Create or modify /etc/docker/daemon.json on the client machine
+    { "insecure-registries":["192.168.1.9:5000"] }
+or edit /etc/default/docker and add DOCKER_OPTS="$DOCKER_OPTS --insecure-registry=192.168.1.9:5000"
+Restart docker daemon
+sudo service docker restart
+docker login 192.168.1.9:5000 - Give username(ubuntu) and password(123456)
+
+docker service create --name swarm_test --network my-network --with-registry-auth 192.168.1.9:5000/madhat/test
