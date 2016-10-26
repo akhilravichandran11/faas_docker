@@ -24,7 +24,7 @@ def user_create(user_name, password):
     user_name = user_name + "_" + str(random.randint(0,9999))
     required_url = root_url + api_urls["user"]["create"]
     data = {
-        "userNam": user_name,
+        "userName": user_name,
         "password": password
     }
     headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
