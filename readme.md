@@ -38,7 +38,12 @@ Nginix/Python/Flask FAAS API Setup :
     - docker rm -f cc_flaskapp_cont
 3. Run Docker Container in required node by giving root acces to contiainer to 
 talk to docker daemon , port forwading of port 80 and link container with DB Manager
-    - docker run -d --name cc_flaskapp_cont -v /var/run/docker.sock:/var/run/docker.sock -p 80:80 --link dbmanager:dbmanager --restart=always --env="MODE=PROD_SWARM" cc_flaskapp
+    - For Swarm Service Mode
+        docker run -d --name cc_flaskapp_cont -v /var/run/docker.sock:/var/run/docker.sock -p 80:80 --link dbmanager:dbmanager --restart=always --env="MODE=PROD_SWARM" cc_flaskapp
+    - For Swarm Container Mode
+        docker run -d --name cc_flaskapp_cont -v /var/run/docker.sock:/var/run/docker.sock -p 80:80 --link dbmanager:dbmanager --restart=always --env="MODE=PROD" cc_flaskapp
+    - For Local Mode
+        docker run -d --name cc_flaskapp_cont -v /var/run/docker.sock:/var/run/docker.sock -p 80:80 --link dbmanager:dbmanager --restart=always cc_flaskapp
 
 Docker CLI commands for executing microservices :
     - Microservices like Create User, Create Function , Execute Function(These commands will be executed though Docker-py(Dockers Python API) from the FAAS web app)
