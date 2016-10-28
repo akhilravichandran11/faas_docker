@@ -22,8 +22,9 @@ if mode is not None:
     #  URLS for talking to docker containers
     db_manager_url = "http://192.168.1.9:8080"
     faas_manager_url = "http://192.168.1.9:80"
-    # db_manager_link_url = "http://dbmanager:8080"
+    db_manager_link_url = "http://dbmanager:8080"
     # db_manager_url = "http://" + socket.gethostbyname(socket.gethostname()) + ":8080"
+    dbmanager = Dbmanager(db_manager_link_url)
     if mode == "PROD_SWARM":
         swarm = True
         image_names = service_image_names
@@ -38,7 +39,7 @@ else:
     faas_manager_url = "http://0.0.0.0:80"
     # db_manager_link_url = "http://dbmanager:8080"
     # db_manager_url = "http://" + socket.gethostbyname(socket.gethostname()) + ":8080"
-
+    dbmanager = Dbmanager(db_manager_url)
 
 faas_api_urls = {
     "service": {
@@ -48,7 +49,8 @@ faas_api_urls = {
 
 #  Objects Initiated for lifecycle of flask app
 docker_client = docker.Client(base_url='unix://var/run/docker.sock')
-dbmanager = Dbmanager(db_manager_url)
+if mode is not None:
+
 docker_util = Dockerutil(docker_client)
 dt_now = datetime.datetime.now()
 dict_base_data = build_dict_with_base_data(swarm,db_manager_url, dbm_api_urls,faas_manager_url,faas_api_urls,status_codes)
