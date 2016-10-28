@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import docker
 import random
+import re
 class Dockerutil:
     def __init__(self, docker_client):
         self.docker_client = docker_client
@@ -8,6 +9,7 @@ class Dockerutil:
     def gen_random_cont_or_serv_name(self,swarm,docker_image_name,datetime_now):
         if swarm:
             docker_cont_or_serv_name = docker_image_name + datetime_now.strftime('serv%m%d%Y') + str(random.randint(0, 9999))
+            docker_cont_or_serv_name = re.sub("_", "", docker_cont_or_serv_name)
         else:
             docker_cont_or_serv_name = docker_image_name + datetime_now.strftime('cont_%m.%d.%Y_') + str(random.randint(0, 9999))
         return docker_cont_or_serv_name
