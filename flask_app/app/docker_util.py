@@ -7,10 +7,10 @@ class Dockerutil:
 
     def gen_random_cont_or_serv_name(self,swarm,docker_image_name,datetime_now):
         if swarm:
-            docker_image_name + datetime_now.strftime('_serv_%m.%d.%Y_') + str(random.randint(0, 9999))
+            docker_cont_or_serv_name = docker_image_name + datetime_now.strftime('_serv_%m.%d.%Y_') + str(random.randint(0, 9999))
         else:
-            docker_image_name + datetime_now.strftime('_cont_%m.%d.%Y_') + str(random.randint(0, 9999))
-        return docker_image_name
+            docker_cont_or_serv_name = docker_image_name + datetime_now.strftime('_cont_%m.%d.%Y_') + str(random.randint(0, 9999))
+        return docker_cont_or_serv_name
 
 
     def get_docker_logs_after_exit(self,docker_container_name):
