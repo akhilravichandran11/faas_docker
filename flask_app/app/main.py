@@ -11,7 +11,7 @@ import os
 import custom_util
 from custom_util import build_response_for_missing_params,build_dict_with_base_data,build_dict_with_request_data,check_dict_for_mandatory_keys
 from db_manager_handler import Dbmanager , dbm_api_urls
-from constants import request_types,status_codes,container_image_names,service_image_names
+from constants import request_types,status_codes,container_image_names,container_names,service_image_names,service_names
 from docker_util import Dockerutil
 
 app = Flask(__name__)
@@ -28,12 +28,15 @@ if mode is not None:
     if mode == "PROD_SWARM":
         swarm = True
         image_names = service_image_names
+        cont_or_serv_names = service_names
     else:
         swarm = False
         image_names = container_image_names
+        cont_or_serv_names = container_names
 else:
     swarm = False
     image_names = container_image_names
+    cont_or_serv_names = container_names
     #  URLS for talking to docker containers
     db_manager_url = "http://0.0.0.0:8080"
     faas_manager_url = "http://0.0.0.0:80"
@@ -83,7 +86,8 @@ def user_create():
     request_type = 'create_user'
     required_arg_keys = ["userName", "password"]
     docker_image_name = image_names[request_type]
-    docker_cont_or_serv_name = docker_util.gen_random_cont_or_serv_name(swarm,docker_image_name,dt_now)
+    cont_or_serv_name = cont_or_serv_names[request_type]
+    docker_cont_or_serv_name = docker_util.gen_random_cont_or_serv_name(swarm,cont_or_serv_name,dt_now)
     try:
         request_args = request.args.to_dict(flat = True)
         if check_dict_for_mandatory_keys(request_args, required_arg_keys):
@@ -109,7 +113,8 @@ def user_update():
     request_type = 'update_user'
     required_arg_keys = ["userId","userName", "password"]
     docker_image_name = image_names[request_type]
-    docker_cont_or_serv_name = docker_util.gen_random_cont_or_serv_name(swarm,docker_image_name,dt_now)
+    cont_or_serv_name = cont_or_serv_names[request_type]
+    docker_cont_or_serv_name = docker_util.gen_random_cont_or_serv_name(swarm,cont_or_serv_name,dt_now)
     try:
         request_args = request.args.to_dict(flat = True)
         if check_dict_for_mandatory_keys(request_args, required_arg_keys):
@@ -138,7 +143,8 @@ def user_delete():
     request_type = 'delete_user'
     required_arg_keys = ["userName","password","userId"]
     docker_image_name = image_names[request_type]
-    docker_cont_or_serv_name = docker_image_name + dt_now.strftime('_cont_%m.%d.%Y_') + str(random.randint(0, 9999))
+    cont_or_serv_name = cont_or_serv_names[request_type]
+    docker_cont_or_serv_name = docker_util.gen_random_cont_or_serv_name(swarm, cont_or_serv_name, dt_now)
     try:
         request_args = request.args.to_dict(flat = True)
         if check_dict_for_mandatory_keys(request_args,required_arg_keys):
@@ -166,7 +172,8 @@ def function_create():
     request_type = 'create_function'
     required_arg_keys = ["userId", "userName","password","functionName"]
     docker_image_name = image_names[request_type]
-    docker_cont_or_serv_name = docker_image_name + dt_now.strftime('_cont_%m.%d.%Y_') + str(random.randint(0, 9999))
+    cont_or_serv_name = cont_or_serv_names[request_type]
+    docker_cont_or_serv_name = docker_util.gen_random_cont_or_serv_name(swarm, cont_or_serv_name, dt_now)
     try:
         request_args = request.args.to_dict(flat = True)
         if check_dict_for_mandatory_keys(request_args,required_arg_keys):
@@ -196,7 +203,8 @@ def function_update():
     request_type = 'update_function'
     required_arg_keys = ["userId", "userName","password","functionName","functionId"]
     docker_image_name = image_names[request_type]
-    docker_cont_or_serv_name = docker_image_name + dt_now.strftime('_cont_%m.%d.%Y_') + str(random.randint(0, 9999))
+    cont_or_serv_name = cont_or_serv_names[request_type]
+    docker_cont_or_serv_name = docker_util.gen_random_cont_or_serv_name(swarm, cont_or_serv_name, dt_now)
     try:
         request_args = request.args.to_dict(flat = True)
         if check_dict_for_mandatory_keys(request_args,required_arg_keys):
@@ -227,7 +235,8 @@ def function_delete():
     request_type = 'delete_function'
     required_arg_keys = ["userName","password","functionId"]
     docker_image_name = image_names[request_type]
-    docker_cont_or_serv_name = docker_image_name + dt_now.strftime('_cont_%m.%d.%Y_') + str(random.randint(0, 9999))
+    cont_or_serv_name = cont_or_serv_names[request_type]
+    docker_cont_or_serv_name = docker_util.gen_random_cont_or_serv_name(swarm, cont_or_serv_name, dt_now)
     try:
         request_args = request.args.to_dict(flat = True)
         if check_dict_for_mandatory_keys(request_args,required_arg_keys):

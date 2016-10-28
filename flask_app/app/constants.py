@@ -21,6 +21,15 @@ container_image_names = {
     "delete_function": "cc_function_delete",
 }
 
+container_names = {
+    "create_user": "cc_user_create",
+    "update_user": "cc_user_update",
+    "delete_user": "cc_user_delete",
+    "create_function": "cc_function_create",
+    "update_function": "cc_function_update",
+    "delete_function": "cc_function_delete",
+}
+
 service_image_names = {
     "create_user": "192.168.1.9:5000/cc_user_create",
     "update_user": "192.168.1.9:5000/cc_user_update",
@@ -28,6 +37,16 @@ service_image_names = {
     "create_function": "192.168.1.9:5000/cc_function_create",
     "update_function": "192.168.1.9:5000/cc_function_update",
     "delete_function": "192.168.1.9:5000/cc_function_delete",
+}
+
+
+service_names = {
+    "create_user": "cc_user_create",
+    "update_user": "cc_user_update",
+    "delete_user": "cc_user_delete",
+    "create_function": "cc_function_create",
+    "update_function": "cc_function_update",
+    "delete_function": "cc_function_delete",
 }
 
 status_codes = {
