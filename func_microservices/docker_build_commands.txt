@@ -5,3 +5,28 @@ docker build -t cc_user_delete --rm ./user/delete/.
 docker build -t cc_function_create --rm ./function/create/.
 docker build -t cc_function_update --rm ./function/update/.
 docker build -t cc_function_delete --rm ./function/delete/.
+
+For running as a service, the following commands would work:
+docker build -t cc_user_create --rm ./user/create/.
+docker tag cc_user_create 192.168.1.9:5000/cc_user_create
+docker push 192.168.1.9:5000/cc_user_create
+
+docker build -t cc_user_update --rm ./user/update/.
+docker tag cc_user_update 192.168.1.9:5000/cc_user_update
+docker push 192.168.1.9:5000/cc_user_update
+
+docker build -t cc_user_delete --rm ./user/delete/.
+docker tag cc_user_delete 192.168.1.9:5000/cc_user_delete
+docker push 192.168.1.9:5000/cc_user_delete
+
+docker build -t cc_function_create --rm ./function/create/.
+docker tag cc_function_create 192.168.1.9:5000/cc_function_create
+docker push 192.168.1.9:5000/cc_function_create
+
+docker build -t cc_function_update --rm ./function/update/.
+docker tag cc_function_update 192.168.1.9:5000/cc_function_update
+docker push 192.168.1.9:5000/cc_function_update
+
+docker build -t cc_function_delete --rm ./function/delete/.
+docker tag cc_function_delete 192.168.1.9:5000/cc_function_delete
+docker push 192.168.1.9:5000/cc_function_delete
