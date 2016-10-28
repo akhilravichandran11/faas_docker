@@ -18,6 +18,7 @@ class Dockerutil:
             print ""
         resp = "Container Name - " + docker_container_name + " \n Logs - " + self.docker_client.logs( docker_container_name, stdout = True, stderr = True, stream = False, timestamps = False)
         return resp
+
     def run_container_or_service(self,swarm,docker_image_name,docker_cont_or_serv_name,data):
         if swarm:
             self.run_service(docker_image_name, docker_cont_or_serv_name, data)
@@ -30,7 +31,8 @@ class Dockerutil:
         self.docker_client.start(current_container)
 
     def run_service(self,docker_image_name,docker_cont_or_serv_name,data):
-        container_spec = docker.types.ContainerSpec(image = docker_image_name,env = data)
+        # container_spec = docker.types.ContainerSpec(image = docker_image_name,env = data)
+        container_spec = docker.types.ContainerSpec(image = docker_image_name)
         task_tmpl = docker.types.TaskTemplate(container_spec)
         service_id = self.docker_client.create_service(task_tmpl, name=docker_cont_or_serv_name)
 
