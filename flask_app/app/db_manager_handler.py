@@ -3,8 +3,9 @@ import requests
 import json
 import random
 from flask import Response
+from constants import request_types
 
-api_urls = {
+dbm_api_urls = {
     "request": {
         "create": "/dbmanager/rest/request/",
         "update": "/dbmanager/rest/request/",
@@ -23,17 +24,6 @@ api_urls = {
     }
 }
 
-request_types = {
-    "request_status": "Request Check Status",
-    "create_user": "Create User",
-    "update_user": "Update User Details",
-    "delete_user": "Delete User",
-    "create_function": "Create Function",
-    "update_function": "Update Function Details",
-    "delete_function": "Delete Function",
-    "execute_function": "Execute Function"
-}
-
 
 class Dbmanager:
     def __init__(self, root_url):
@@ -41,7 +31,7 @@ class Dbmanager:
 
     def request_create(self, request_type, request_parameters, request_status, result):
         if request_types.has_key(request_type):
-            required_url = self.root_url + api_urls["request"]["create"]
+            required_url = self.root_url + dbm_api_urls["request"]["create"]
             data = {
                 "requestType": request_type,
                 "requestStatus": request_status,
@@ -76,7 +66,7 @@ class Dbmanager:
             raise Exception("Invalid Request Type")
 
     def request_update(self, request_id, request_status):
-        required_url = self.root_url + api_urls["request"]["update"]
+        required_url = self.root_url + dbm_api_urls["request"]["update"]
         data = {
             "requestId": request_id,
             "requestStatus": request_status
@@ -107,7 +97,7 @@ class Dbmanager:
         return resp
 
     def request_check_status(self, request_id):
-        required_url = self.root_url + api_urls["request"]["check_status"] + request_id
+        required_url = self.root_url + dbm_api_urls["request"]["check_status"] + request_id
         request_obj = requests.get(required_url)
 
         if request_obj.status_code == 200:
@@ -138,7 +128,7 @@ class Dbmanager:
 
     def user_create(self, user_name, password):
         user_name = user_name + "_" + str(random.randint(0, 9999))
-        required_url = self.root_url + api_urls["user"]["create"]
+        required_url = self.root_url + dbm_api_urls["user"]["create"]
         data = {
             "userName": user_name,
             "password": password
@@ -171,7 +161,7 @@ class Dbmanager:
         return resp
 
     def user_update(self, user_id, user_name, password):
-        required_url = self.root_url + api_urls["user"]["update"]
+        required_url = self.root_url + dbm_api_urls["user"]["update"]
         data = {
             "userId" : user_id,
             "userName": user_name,
@@ -206,7 +196,7 @@ class Dbmanager:
         return resp
 
     def user_delete(self, user_id):
-        required_url = self.root_url + api_urls["user"]["delete"]
+        required_url = self.root_url + dbm_api_urls["user"]["delete"]
         delete_append_url = "/" + str(user_id)
         required_url = required_url + delete_append_url
         headers = {'Accept': 'text/plain'}
@@ -235,7 +225,7 @@ class Dbmanager:
 
     def function_create(self, function_name, function_content, user_id, user_name):
         function_name = function_name + "_" + str(random.randint(0, 9999))
-        required_url = self.root_url + api_urls["function"]["create"]
+        required_url = self.root_url + dbm_api_urls["function"]["create"]
         creator_data = {"userId": user_id, "userName": user_name}
         data = {"functionId": None,
                 "functionName": function_name,
@@ -278,7 +268,7 @@ class Dbmanager:
         return resp
 
     def function_update(self, function_id, function_name, function_content, user_id, user_name):
-        required_url = self.root_url + api_urls["function"]["update"]
+        required_url = self.root_url + dbm_api_urls["function"]["update"]
         creator_data = {"userId": user_id, "userName": user_name}
         data = {"functionId": function_id,
                 "functionName": function_name,
@@ -322,7 +312,7 @@ class Dbmanager:
         return resp
 
     def function_delete(self, function_id):
-        required_url = self.root_url + api_urls["function"]["delete"]
+        required_url = self.root_url + dbm_api_urls["function"]["delete"]
         delete_append_url = "/" + str(function_id)
         required_url = required_url + delete_append_url
         headers = {'Accept': 'text/plain'}

@@ -1,9 +1,11 @@
 import docker.types
 from docker import Client
 cli = Client(base_url='unix://var/run/docker.sock')
+
 container_spec = docker.types.ContainerSpec(image='192.168.1.9:5000/madhat-test')
 task_tmpl = docker.types.TaskTemplate(container_spec)
 service_id = cli.create_service(task_tmpl, name='swarm_test')
+
 networking_config = cli.create_networking_config({'host':cli.create_endpoint_config()})
 For creating registry
 mkdir -p auth

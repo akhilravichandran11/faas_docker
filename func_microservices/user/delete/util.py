@@ -1,7 +1,8 @@
 import requests
+import json
 
 def request_update( request_data, request_status, result):
-    required_url = request_data["root_url"] + request_data["api_url"]
+    required_url = request_data["db_manager_url"] + request_data["api_url"]
     data = {
         "requestId": request_data["request_id"],
         "requestType" : request_data["request_type"],

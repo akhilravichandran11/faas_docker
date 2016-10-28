@@ -1,7 +1,8 @@
 #!/usr/bin/python
 from flask import Flask, request, jsonify , json , Response
 import docker
-
+from db_manager_handler import dbm_api_urls , request_types
+from constants import status_codes,container_image_names
 
 def custom_print(obj, sepeartor='\n'):
     if type(obj) is dict:
@@ -39,8 +40,21 @@ def build_response_for_missing_params(request_type,required_arg_keys):
     resp = Response(json.dumps(resp_data), status = 404, mimetype = 'application/json')
     return resp
 
-def get_docker_logs_after_exit(docker_client , docker_container_name):
-    while(docker_client.inspect_container(docker_container_name).get('State', dict()).get('Running')):
-        print ""
-    resp = "Container Name - " + docker_container_name + " \n Logs - " + docker_client.logs( docker_container_name, stdout = True, stderr = True, stream = False, timestamps = False)
-    return resp
+def build_dict_with_base_data(swarm,db_manager_url,dbm_api_urls,faas_manager_url,faas_api_urls,status_codes):
+    data = dict(
+                SWARM=swarm,
+                DB_MANAGER_URL=db_manager_url,
+                DBM_API_URLS = dbm_api_urls,
+                FAAS_MANAGER_URL =faas_manager_url,
+                FAAS_API_URLS=faas_api_urls,
+                STATUS_CODES = status_codes
+            )
+    return data
+
+def build_dict_with_request_data(docker_cont_or_serv_name,request_type,request_id):
+    data = dict(
+                CONT_OR_SERV_NAME=docker_cont_or_serv_name,
+                REQUEST_TYPE=request_type,
+                REQUEST_ID=request_id
+            )
+    return data

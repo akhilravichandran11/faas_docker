@@ -5,9 +5,13 @@ import json
 import ast
 from util import request_update
 
-root_url = os.environ['ROOT_URL']
-api_urls = ast.literal_eval(os.environ['API_URLS'])
+swarm = ast.literal_eval(os.environ['SWARM'])
+db_manager_url = os.environ['DB_MANAGER_URL']
+dbm_api_urls = ast.literal_eval(os.environ['DBM_API_URLS'])
+faas_manager_url = os.environ['FAAS_MANAGER_URL']
+faas_api_urls = ast.literal_eval(os.environ['FAAS_API_URLS'])
 status_codes = ast.literal_eval(os.environ['STATUS_CODES'])
+cont_or_serv_name = os.environ['CONT_OR_SERV_NAME']
 request_id = os.environ['REQUEST_ID']
 request_type = os.environ['REQUEST_TYPE']
 user_id = os.environ['USER_ID']
@@ -17,14 +21,14 @@ function_name = os.environ['FUNCTION_NAME']
 function_content = os.environ['FUNCTION_CONTENT']
 
 request_data ={
-    "root_url" : root_url,
-    "api_url" : api_urls["request"]["update"],
+    "db_manager_url" : db_manager_url,
+    "api_url" : dbm_api_urls["request"]["update"],
     "request_id" : request_id,
     "request_type" : request_type
 }
 
 def function_update(function_id, function_name, function_content, user_id, user_name):
-    required_url = root_url + api_urls["function"]["update"]
+    required_url = db_manager_url + dbm_api_urls["function"]["update"]
     creator_data = {"userId": user_id, "userName": user_name}
     data = {"functionId": function_id,
             "functionName": function_name,
