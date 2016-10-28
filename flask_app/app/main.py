@@ -17,14 +17,19 @@ from docker_util import Dockerutil
 app = Flask(__name__)
 
 #Global Variables based on evn variable MODE
-if os.environ.get('MODE') is not None:
-    swarm = True
-    image_names = service_image_names
+mode = os.environ.get('MODE')
+if mode is not None:
     #  URLS for talking to docker containers
     db_manager_url = "http://192.168.1.9:8080"
     faas_manager_url = "http://192.168.1.9:80"
     # db_manager_link_url = "http://dbmanager:8080"
     # db_manager_url = "http://" + socket.gethostbyname(socket.gethostname()) + ":8080"
+    if mode == "PROD_SWARM":
+        swarm = True
+        image_names = service_image_names
+    else:
+        swarm = False
+        image_names = container_image_names
 else:
     swarm = False
     image_names = container_image_names
@@ -53,7 +58,11 @@ dict_base_data = build_dict_with_base_data(swarm,db_manager_url, dbm_api_urls,fa
 
 @app.route("/")
 def hello():
-    return "Welcome To Madhatterz - FAAS - " + str(swarm)
+    welcome = "Welcome To Madhatterz - FAAS"
+    env_mode = "ENV_MODE = "+str(mode)
+    swarm_val = "Swarm = " + str(swarm)
+    resp = ("\n").join([welcome,env_mode,swarm_val])
+    return resp
 
 
 @app.route("/request/check_status", methods = ['GET'] )
