@@ -49,13 +49,9 @@ faas_api_urls = {
 
 #  Objects Initiated for lifecycle of flask app
 docker_client = docker.Client(base_url='unix://var/run/docker.sock')
-if mode is not None:
-
 docker_util = Dockerutil(docker_client)
 dt_now = datetime.datetime.now()
 dict_base_data = build_dict_with_base_data(swarm,db_manager_url, dbm_api_urls,faas_manager_url,faas_api_urls,status_codes)
-
-
 
 
 @app.route("/")
