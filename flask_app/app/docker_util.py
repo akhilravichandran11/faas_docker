@@ -33,7 +33,7 @@ class Dockerutil:
         self.docker_client.start(current_container)
 
     def run_service(self,docker_image_name,docker_cont_or_serv_name,data):
-        container_spec = docker.types.ContainerSpec(image = docker_image_name, env = data , stop_grace_period = 1)
+        container_spec = docker.types.ContainerSpec(image = docker_image_name, stop_grace_period = 1)
         # container_spec = docker.types.ContainerSpec(image = docker_image_name)
         task_tmpl = docker.types.TaskTemplate(container_spec)
         service_id = self.docker_client.create_service(task_tmpl, name=docker_cont_or_serv_name)
