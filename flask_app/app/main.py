@@ -98,8 +98,8 @@ def user_create():
                     "USER_NAME" : request_args["userName"],
                     "PASSWORD": request_args["password"]
                 }
-                data.update(dict_base_data)
-                data.update(build_dict_with_request_data(docker_cont_or_serv_name, request_type, response_data["requestId"]))
+                # data.update(dict_base_data)
+                # data.update(build_dict_with_request_data(docker_cont_or_serv_name, request_type, response_data["requestId"]))
                 docker_util.run_container_or_service(swarm,docker_image_name, docker_cont_or_serv_name, data)
                 # resp = dbmanager.user_create(data["USER_NAME"], data["PASSWORD"])
             else:
