@@ -11,6 +11,10 @@ docker build -t cc_user_create --rm ./user/create/.
 docker tag cc_user_create 192.168.1.9:5000/cc_user_create
 docker push 192.168.1.9:5000/cc_user_create
 
+docker build -t cc_user_create_1 --rm ./user/create/.
+docker tag cc_user_create_1 192.168.1.9:5000/cc_user_create_1
+docker push 192.168.1.9:5000/cc_user_create_1
+
 docker build -t cc_user_update --rm ./user/update/.
 docker tag cc_user_update 192.168.1.9:5000/cc_user_update
 docker push 192.168.1.9:5000/cc_user_update
