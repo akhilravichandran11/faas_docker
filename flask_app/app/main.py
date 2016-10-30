@@ -94,9 +94,13 @@ def user_create():
             response_data = dbmanager.request_create(request_type, json.dumps(request_args), status_codes[request_type][101] + docker_cont_or_serv_name, "in_progress")
             resp = Response(json.dumps(response_data), status = 200, mimetype = 'application/json' )
             if response_data["success"]:
+                # data = {
+                #     "USER_NAME" : request_args["userName"],
+                #     "PASSWORD": request_args["password"]
+                # }
+
                 data = {
-                    "USER_NAME" : request_args["userName"],
-                    "PASSWORD": request_args["password"]
+                    "USER_NAME": [request_args["userName"]]
                 }
                 # data.update(dict_base_data)
                 # data.update(build_dict_with_request_data(docker_cont_or_serv_name, request_type, response_data["requestId"]))
