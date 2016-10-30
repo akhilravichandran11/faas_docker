@@ -5,7 +5,7 @@ import json
 import ast
 from util import request_update,cont_or_serv_remove_logic
 
-swarm = ast.literal_eval(os.environ['SWARM'])
+swarm = os.environ['SWARM']
 # db_manager_url = os.environ['DB_MANAGER_URL']
 # dbm_api_urls = ast.literal_eval(os.environ['DBM_API_URLS'])
 # faas_manager_url = os.environ['FAAS_MANAGER_URL']
