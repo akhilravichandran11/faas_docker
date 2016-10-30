@@ -53,8 +53,7 @@ def build_dict_with_base_data(swarm,db_manager_url,dbm_api_urls,faas_manager_url
     data = dict(
         SWARM = swarm,
         DB_MANAGER_URL = db_manager_url,
-        DBM_API_URLS = dbm_api_urls,
-        FAAS_MANAGER_URL =faas_manager_url
+        DBM_API_URLS = dbm_api_urls
     )
     return data
 
