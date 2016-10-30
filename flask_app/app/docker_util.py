@@ -10,8 +10,6 @@ class Dockerutil:
     def gen_random_cont_or_serv_name(self,swarm,cont_or_serv_name,datetime_now):
         if swarm:
             docker_cont_or_serv_name = cont_or_serv_name + "_" + str(uuid.uuid4().hex)
-            # docker_cont_or_serv_name = "swarm_" + str(random.randint(0, 9999))
-            #docker_cont_or_serv_name = re.sub("_", "", docker_cont_or_serv_name)
         else:
             docker_cont_or_serv_name = cont_or_serv_name + datetime_now.strftime('_cont_%m.%d.%Y_') + str(random.randint(0, 9999))
         return docker_cont_or_serv_name
@@ -35,7 +33,7 @@ class Dockerutil:
         self.docker_client.start(current_container)
 
     def run_service(self,docker_image_name,docker_cont_or_serv_name,data):
-        container_spec = docker.types.ContainerSpec(image = docker_image_name)
+        container_spec = docker.types.ContainerSpec(image = docker_image_name, env = data)
         # container_spec = docker.types.ContainerSpec(image = docker_image_name)
         task_tmpl = docker.types.TaskTemplate(container_spec)
         service_id = self.docker_client.create_service(task_tmpl, name=docker_cont_or_serv_name)

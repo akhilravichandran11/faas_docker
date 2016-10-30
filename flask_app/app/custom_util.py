@@ -40,15 +40,20 @@ def build_response_for_missing_params(request_type,required_arg_keys):
     resp = Response(json.dumps(resp_data), status = 404, mimetype = 'application/json')
     return resp
 
+
+
 def build_dict_with_base_data(swarm,db_manager_url,dbm_api_urls,faas_manager_url,faas_api_urls,status_codes):
+    # data = dict(
+    #             SWARM=swarm,
+    #             DB_MANAGER_URL=db_manager_url,
+    #             DBM_API_URLS = dbm_api_urls,
+    #             FAAS_MANAGER_URL =faas_manager_url,
+    #             FAAS_API_URLS=faas_api_urls,
+    #             STATUS_CODES = status_codes
     data = dict(
-                SWARM=swarm,
-                DB_MANAGER_URL=db_manager_url,
-                DBM_API_URLS = dbm_api_urls,
-                FAAS_MANAGER_URL =faas_manager_url,
-                FAAS_API_URLS=faas_api_urls,
-                STATUS_CODES = status_codes
-            )
+        SWARM = swarm
+    )
+    #         )
     return data
 
 def build_dict_with_request_data(docker_cont_or_serv_name,request_type,request_id):
