@@ -100,7 +100,7 @@ def user_create():
                 # }
 
                 data = {
-                    "USER_NAME": [request_args["userName"]]
+                    "SWARM": "SWARM"
                 }
                 # data.update(dict_base_data)
                 # data.update(build_dict_with_request_data(docker_cont_or_serv_name, request_type, response_data["requestId"]))
