@@ -1,4 +1,5 @@
 #!/usr/bin/python
+
 import docker
 import random
 import uuid
@@ -33,10 +34,10 @@ class Dockerutil:
         self.docker_client.start(current_container)
 
     def run_service(self,docker_image_name,docker_cont_or_serv_name,data):
-        container_spec = docker.types.ContainerSpec(image = docker_image_name, stop_grace_period = 1, env = dict(SWARM="SWARM"))
-        # container_spec = docker.types.ContainerSpec(image = docker_image_name)
+        # docker_client_1 = docker.Client(base_url='unix://var/run/docker.sock')
+        container_spec = docker.types.ContainerSpec(image = "192.168.1.9:5000/cc_user_create", env = ["SWARM=SWARM"])
         task_tmpl = docker.types.TaskTemplate(container_spec)
-        service_id = self.docker_client.create_service(task_tmpl, name=docker_cont_or_serv_name)
+        service_id = self.docker_client.create_service(task_tmpl, name="cc_sw_user_create_1")
 
     def remove_service(self,docker_service_name):
         self.docker_client.remove_service(docker_service_name)

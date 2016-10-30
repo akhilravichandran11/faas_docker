@@ -65,7 +65,7 @@ swarm = os.environ['SWARM']
 #     return data
 
 if __name__ == "__main__":
-    print "Dude I can Read - " + swarm
+    print "Dude I can Read 1 - " + swarm
     # container_started_update = request_update(request_data,status_codes[request_type][102], "in_progress")
     # if container_started_update:
     #     response_data = user_create(user_name, password)
@@ -74,6 +74,6 @@ if __name__ == "__main__":
     #     while(True):
     #         pass
     while (True):
-        pass
+        print "Dude I can Read - " + swarm
     else:
         raise Exception("Fatal Exception - Request Update Failed")
