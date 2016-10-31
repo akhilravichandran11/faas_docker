@@ -14,8 +14,9 @@ def stdoutIO(stdout=None):
 
 code = """
 def madhat_func(data):
-	i = [0,1]
+	i = [0,1
 	for j in i :
+		data["dude"] = data["dude"]+ j
 		print data["dude"]
 """
 main_code = """
@@ -31,14 +32,22 @@ main_code_2 = """
 resp = madhat_func(data)
 """
 data = {
-	"dude" : "dude"
+	"dude" : 2
 }
 resp = ""
+temp = sys.stderr
 try:
+	print "data 1 = "+ str(data)
 	with stdoutIO() as s:
+		print "dude 3"
 		exec(code+main_code_2,{"data":data})
+	print "data 2 = "+ str(data)
 	resp = "out:" + s.getvalue()
 except Exception as e:
+	print "entered error"
 	resp = traceback.format_exc()
-	resp = "exp:" + resp
+	print >> temp
+#print resp
 print resp
+print >> sys.stdout
+print >> sys.stderr

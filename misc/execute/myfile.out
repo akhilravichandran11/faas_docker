@@ -1,0 +1,13 @@
+Dude Start
+Before Data = {'dude': 2}
+Entered Exception
+Traceback (most recent call last):
+  File "app_try_4.py", line 45, in <module>
+    exec(code+main_code_2,{"data":data})
+  File "<string>", line 3
+    i = [0,1
+    ^
+IndentationError: expected an indented block
+
+Completed Exception
+Dude End
