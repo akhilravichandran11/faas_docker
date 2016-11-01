@@ -18,6 +18,7 @@ dbm_api_urls = {
         "auth": "/dbmanger/rest/users/auth"
     },
     "function": {
+        "get": "/dbmanager/rest/functions",
         "create": "/dbmanager/rest/functions",
         "update": "/dbmanager/rest/functions",
         "delete": "/dbmanager/rest/functions"
@@ -338,3 +339,39 @@ class Dbmanager:
             }
         resp = Response(json.dumps(data), status=request_obj.status_code, mimetype='application/json')
         return resp
+
+    def function_get(self, function_id):
+        required_url = self.root_url + dbm_api_urls["function"]["get"]
+        get_append_url = "/" + str(function_id)
+        required_url = required_url + get_append_url
+        headers = {'Accept': 'text/plain'}
+        request_obj = requests.get(required_url,  headers = headers)
+
+        if request_obj.status_code == 200:
+            request_obj_json = request_obj.json()
+            data = {
+                "functionId": request_obj_json["functionId"],
+                "functionName": request_obj_json["functionName"],
+                "functionContent": request_obj_json["functionContent"],
+                "requestStatus": "Function Found",
+                "result": "success",
+                "status_code" : request_obj.status_code,
+                "success": True
+            }
+        elif request_obj.status_code == 404:
+            data = {
+                "functionId": function_id,
+                "requestStatus": "Function Get Failed - functionId Not Present - " + str(request_obj.text),
+                "result": "failure",
+                "status_code": request_obj.status_code,
+                "success": False
+            }
+        else:
+            data = {
+                "functionId": None,
+                "requestStatus": "Function Get Failed - " + str(request_obj.text),
+                "result": "failure",
+                "status_code": request_obj.status_code,
+                "success": False
+            }
+        return data

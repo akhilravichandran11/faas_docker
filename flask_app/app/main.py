@@ -246,6 +246,36 @@ def function_delete():
         resp = traceback.format_exc()
     return resp
 
+@app.route("/function/execute" , methods = ['GET'] )
+def function_execute():
+    request_type = 'execute_function'
+    required_arg_keys = ["userName","password","functionId"]
+    docker_image_name = image_names[request_type]
+    cont_or_serv_name = cont_or_serv_names[request_type]
+    docker_cont_or_serv_name = docker_util.gen_random_cont_or_serv_name(swarm, cont_or_serv_name, dt_now)
+    try:
+        request_args = request.args.to_dict(flat = True)
+        if check_dict_for_mandatory_keys(request_args,required_arg_keys):
+            response_data = dbmanager.function_get(request_args["functionId"])
+            if response_data["success"]:
+                response_data = dbmanager.request_create(request_type, json.dumps(request_args),status_codes[request_type][101] + docker_cont_or_serv_name, "in_progress")
+                resp = Response(json.dumps(response_data), status = 200, mimetype = 'application/json' )
+                if response_data["success"]:
+                    data = {
+                        "FUNCTION_CONTENT": request_args["functionContent"],
+                        "FUNCTION_DATA": request.json
+                    }
+                    data.update(dict_base_data)
+                    data.update(build_dict_with_request_data(docker_cont_or_serv_name, request_type, response_data["requestId"]))
+            else:
+                status_code = response_data["status_code"]
+                map(response_data.pop(),["status_code","success"])
+                resp = Response(json.dumps(response_data), status = status_code, mimetype='application/json')
+        else:
+            resp = build_response_for_missing_params(request_types[request_type], required_arg_keys)
+    except Exception as e:
+        resp = traceback.format_exc()
+    return resp
 
 @app.route("/services/remove<string:service_id>" , methods = ['DELETE'])
 def docker_service_remove(service_id):

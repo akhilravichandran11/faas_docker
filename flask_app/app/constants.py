@@ -19,6 +19,7 @@ container_image_names = {
     "create_function": "cc_function_create",
     "update_function": "cc_function_update",
     "delete_function": "cc_function_delete",
+    "execute_function": "cc_function_execute"
 }
 
 container_names = {
@@ -28,6 +29,7 @@ container_names = {
     "create_function": "cc_function_create",
     "update_function": "cc_function_update",
     "delete_function": "cc_function_delete",
+    "execute_function": "cc_function_execute"
 }
 
 service_image_names = {
@@ -37,6 +39,7 @@ service_image_names = {
     "create_function": "192.168.1.9:5000/cc_function_create",
     "update_function": "192.168.1.9:5000/cc_function_update",
     "delete_function": "192.168.1.9:5000/cc_function_delete",
+    "execute_function": "192.168.1.9:5000/cc_function_execute"
 }
 
 
@@ -47,6 +50,7 @@ service_names = {
     "create_function": "cc_function_create",
     "update_function": "cc_function_update",
     "delete_function": "cc_function_delete",
+    "execute_function": "cc_function_execute"
 }
 
 status_codes = {
