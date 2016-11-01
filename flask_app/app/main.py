@@ -277,7 +277,7 @@ def function_execute():
         resp = traceback.format_exc()
     return resp
 
-@app.route("/services/remove<string:service_id>" , methods = ['DELETE'])
+@app.route("/services/remove/<string:service_id>" , methods = ['DELETE'])
 def docker_service_remove(service_id):
     request_type = 'docker_service_remove'
     required_arg_keys = ["service_id"]

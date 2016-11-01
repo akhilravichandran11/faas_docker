@@ -39,21 +39,21 @@ def user_update(user_id, user_name, password):
         request_obj_json = request_obj.json()
         data = {
             "userId": user_id,
-            "user_name": request_obj_json["userName"],
+            "userName": request_obj_json["userName"],
             "requestStatus": "User Details Updated - Your userId is " + request_obj_json["userId"],
             "result": "success"
         }
     elif request_obj.status_code == 400:
         data = {
             "userId": user_id,
-            "user_name": user_name,
+            "userName": user_name,
             "requestStatus": "User Details Update Failed - User Name Already Taken " + str(request_obj.text),
             "result": "failure"
         }
     else:
         data = {
             "userId": user_id,
-            "user_name": user_name,
+            "userName": user_name,
             "requestStatus": "User Details Update Failed - " + str(request_obj.text),
             "result": "failure"
         }
