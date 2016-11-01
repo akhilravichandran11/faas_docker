@@ -14,3 +14,17 @@ def request_update( request_data, request_status, result):
 
     response  = ( True if(request_obj.status_code == 200) else False )
     return response
+
+def faas_remove_service(faas_manager_url,api_url,cont_or_serv_name):
+    delete_append_url = "/" + str(cont_or_serv_name)
+    required_url = faas_manager_url + api_url
+    headers = { 'Accept': 'text/plain'}
+    request_obj = requests.delete(required_url, headers = headers)
+    response  = ( True if(request_obj.status_code == 204) else False )
+    return response
+
+def cont_or_serv_remove_logic( swarm , faas_manager_data):
+    if swarm:
+        faas_remove_service(faas_manager_data["faas_manager_url"],faas_manager_data["faas_api_urls"]["service"]["remove"],faas_manager_data["cont_or_serv_name"])
+        while (True):
+            pass

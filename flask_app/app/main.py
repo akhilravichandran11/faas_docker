@@ -23,7 +23,6 @@ if mode is not None:
     db_manager_url = "http://192.168.1.9:8080"
     faas_manager_url = "http://192.168.1.9:80"
     db_manager_link_url = "http://dbmanager:8080"
-    # db_manager_url = "http://" + socket.gethostbyname(socket.gethostname()) + ":8080"
     dbmanager = Dbmanager(db_manager_link_url)
     if mode == "PROD_SWARM":
         swarm = True
@@ -41,7 +40,6 @@ else:
     db_manager_url = "http://0.0.0.0:8080"
     faas_manager_url = "http://0.0.0.0:80"
     # db_manager_link_url = "http://dbmanager:8080"
-    # db_manager_url = "http://" + socket.gethostbyname(socket.gethostname()) + ":8080"
     dbmanager = Dbmanager(db_manager_url)
 
 faas_api_urls = {
@@ -94,16 +92,12 @@ def user_create():
             response_data = dbmanager.request_create(request_type, json.dumps(request_args), status_codes[request_type][101] + docker_cont_or_serv_name, "in_progress")
             resp = Response(json.dumps(response_data), status = 200, mimetype = 'application/json' )
             if response_data["success"]:
-                # data = {
-                #     "USER_NAME" : request_args["userName"],
-                #     "PASSWORD": request_args["password"]
-                # }
-
                 data = {
-                    "SWARM": "SWARM"
+                    "USER_NAME" : request_args["userName"],
+                    "PASSWORD": request_args["password"]
                 }
-                # data.update(dict_base_data)
-                # data.update(build_dict_with_request_data(docker_cont_or_serv_name, request_type, response_data["requestId"]))
+                data.update(dict_base_data)
+                data.update(build_dict_with_request_data(docker_cont_or_serv_name, request_type, response_data["requestId"]))
                 docker_util.run_container_or_service(swarm,docker_image_name, docker_cont_or_serv_name, data)
                 # resp = dbmanager.user_create(data["USER_NAME"], data["PASSWORD"])
             else:
@@ -132,10 +126,8 @@ def user_update():
                 }
                 data.update(dict_base_data)
                 data.update(build_dict_with_request_data(docker_cont_or_serv_name, request_type, response_data["requestId"]))
+                docker_util.run_container_or_service(swarm, docker_image_name, docker_cont_or_serv_name, data)
                 # resp = dbmanager.user_update(data["USER_ID"],data["USER_NAME"],data["PASSWORD"])
-                host_config = docker_client.create_host_config(privileged = False, network_mode = 'host')
-                current_container = docker_client.create_container(image = docker_image_name  , name = docker_cont_or_serv_name , environment = data , host_config = host_config)
-                docker_client.start(current_container)
             else:
                 resp = build_response_for_missing_params(request_types[request_type],required_arg_keys)
     except Exception as e:
@@ -160,10 +152,8 @@ def user_delete():
                 }
                 data.update(dict_base_data)
                 data.update(build_dict_with_request_data(docker_cont_or_serv_name, request_type, response_data["requestId"]))
+                docker_util.run_container_or_service(swarm, docker_image_name, docker_cont_or_serv_name, data)
                 # resp = dbmanager.user_delete(data["USER_ID"])
-                host_config = docker_client.create_host_config(privileged = False, network_mode = 'host')
-                current_container = docker_client.create_container(image = docker_image_name  , name = docker_cont_or_serv_name , environment = data , host_config = host_config)
-                docker_client.start(current_container)
         else:
             resp = build_response_for_missing_params(request_types[request_type], required_arg_keys)
     except Exception as e:
@@ -192,10 +182,8 @@ def function_create():
                 }
                 data.update(dict_base_data)
                 data.update(build_dict_with_request_data(docker_cont_or_serv_name, request_type, response_data["requestId"]))
+                docker_util.run_container_or_service(swarm, docker_image_name, docker_cont_or_serv_name, data)
                 # resp = dbmanager.function_create(data["FUNCTION_NAME"],data["FUNCTION_CONTENT"],data["USER_ID"],data["USER_NAME"])
-                host_config = docker_client.create_host_config(privileged = False, network_mode = 'host')
-                current_container = docker_client.create_container(image = docker_image_name  , name = docker_cont_or_serv_name , environment = data , host_config = host_config)
-                docker_client.start(current_container)
         else:
             resp = build_response_for_missing_params(request_types[request_type], required_arg_keys)
     except Exception as e:
@@ -224,10 +212,8 @@ def function_update():
                 }
                 data.update(dict_base_data)
                 data.update(build_dict_with_request_data(docker_cont_or_serv_name, request_type, response_data["requestId"]))
+                docker_util.run_container_or_service(swarm, docker_image_name, docker_cont_or_serv_name, data)
                 # resp = dbmanager.function_update(data["FUNCTION_ID"],data["FUNCTION_NAME"],data["FUNCTION_CONTENT"],data["USER_ID"],data["USER_NAME"])
-                host_config = docker_client.create_host_config(privileged = False, network_mode = 'host')
-                current_container = docker_client.create_container(image = docker_image_name  , name = docker_cont_or_serv_name , environment = data , host_config = host_config)
-                docker_client.start(current_container)
         else:
             resp = build_response_for_missing_params(request_types[request_type], required_arg_keys)
     except Exception as e:
@@ -252,10 +238,8 @@ def function_delete():
                 }
                 data.update(dict_base_data)
                 data.update(build_dict_with_request_data(docker_cont_or_serv_name, request_type, response_data["requestId"]))
+                docker_util.run_container_or_service(swarm, docker_image_name, docker_cont_or_serv_name, data)
                 # resp = dbmanager.function_delete(data["FUNCTION_ID"])
-                host_config = docker_client.create_host_config(privileged = False, network_mode = 'host')
-                current_container = docker_client.create_container(image = docker_image_name  , name = docker_cont_or_serv_name , environment = data , host_config = host_config)
-                docker_client.start(current_container)
         else:
             resp = build_response_for_missing_params(request_types[request_type], required_arg_keys)
     except Exception as e:

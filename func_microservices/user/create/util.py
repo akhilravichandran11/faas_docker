@@ -26,3 +26,5 @@ def faas_remove_service(faas_manager_url,api_url,cont_or_serv_name):
 def cont_or_serv_remove_logic( swarm , faas_manager_data):
     if swarm:
         faas_remove_service(faas_manager_data["faas_manager_url"],faas_manager_data["faas_api_urls"]["service"]["remove"],faas_manager_data["cont_or_serv_name"])
+        while (True):
+            pass

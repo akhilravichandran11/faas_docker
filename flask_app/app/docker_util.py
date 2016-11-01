@@ -4,6 +4,7 @@ import docker
 import random
 import uuid
 import re
+import custom_util
 class Dockerutil:
     def __init__(self, docker_client):
         self.docker_client = docker_client
@@ -23,6 +24,7 @@ class Dockerutil:
         return resp
 
     def run_container_or_service(self,swarm,docker_image_name,docker_cont_or_serv_name,data):
+        data = custom_util.convert_dict_to_list(data)
         if swarm:
             self.run_service(docker_image_name, docker_cont_or_serv_name, data)
         else:
@@ -34,10 +36,10 @@ class Dockerutil:
         self.docker_client.start(current_container)
 
     def run_service(self,docker_image_name,docker_cont_or_serv_name,data):
-        # docker_client_1 = docker.Client(base_url='unix://var/run/docker.sock')
-        container_spec = docker.types.ContainerSpec(image = "192.168.1.9:5000/cc_user_create", env = ["SWARM=SWARM"])
+        # container_spec = docker.types.ContainerSpec(image = "192.168.1.9:5000/cc_user_create", env = ["SWARM=SWARM"])
+        container_spec = docker.types.ContainerSpec(image=docker_image_name, env=data)
         task_tmpl = docker.types.TaskTemplate(container_spec)
-        service_id = self.docker_client.create_service(task_tmpl, name="cc_sw_user_create")
+        service_id = self.docker_client.create_service(task_tmpl, name=docker_cont_or_serv_name,)
 
     def remove_service(self,docker_service_name):
         self.docker_client.remove_service(docker_service_name)

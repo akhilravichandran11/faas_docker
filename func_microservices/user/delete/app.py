@@ -3,7 +3,7 @@ import requests
 import random
 import json
 import ast
-from util import request_update
+from util import request_update,cont_or_serv_remove_logic
 
 swarm = ast.literal_eval(os.environ['SWARM'])
 db_manager_url = os.environ['DB_MANAGER_URL']
@@ -55,5 +55,6 @@ if __name__ == "__main__":
     if container_started_update:
         response_data = user_delete(user_id)
         request_update(request_data, response_data["requestStatus"], response_data["result"])
+        cont_or_serv_remove_logic( swarm , faas_manager_data)
     else:
         raise Exception("Fatal Exception - Request Update Failed")
