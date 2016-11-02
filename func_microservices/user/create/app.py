@@ -1,6 +1,5 @@
 import os
 import requests
-import random
 import json
 import ast
 from util import request_update,cont_or_serv_remove_logic
@@ -31,7 +30,7 @@ faas_manager_data ={
 }
 
 def user_create(user_name, password):
-    user_name = user_name + "_" + str(random.randint(0,9999))
+    user_name = user_name
     required_url = db_manager_url + dbm_api_urls["user"]["create"]
     data = {
         "userName": user_name,

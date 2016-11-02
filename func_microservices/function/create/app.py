@@ -1,6 +1,5 @@
 import os
 import requests
-import random
 import json
 import ast
 from util import request_update,cont_or_serv_remove_logic
@@ -33,7 +32,7 @@ faas_manager_data ={
 }
 
 def function_create(function_name, function_content, user_id, user_name):
-    function_name = function_name + "_" + str(random.randint(0, 9999))
+    function_name = function_name
     required_url = db_manager_url + dbm_api_urls["function"]["create"]
     creator_data = {"userId": user_id, "userName": user_name}
     data = {"functionId": None,
