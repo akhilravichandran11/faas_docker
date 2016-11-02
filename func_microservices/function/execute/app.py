@@ -4,6 +4,7 @@ import random
 import json
 import ast
 from util import request_update,cont_or_serv_remove_logic
+from func_exec import execute_function
 
 swarm = ast.literal_eval(os.environ['SWARM'])
 db_manager_url = os.environ['DB_MANAGER_URL']
@@ -14,7 +15,9 @@ status_codes = ast.literal_eval(os.environ['STATUS_CODES'])
 cont_or_serv_name = os.environ['CONT_OR_SERV_NAME']
 request_id = os.environ['REQUEST_ID']
 request_type = os.environ['REQUEST_TYPE']
-function_id = os.environ['FUNCTION_ID']
+function_content = os.environ['FUNCTION_CONTENT']
+function_input = os.environ['FUNCTION_INPUT']
+function_output = os.environ['FUNCTION_OUTPUT']
 
 request_data ={
     "db_manager_url" : db_manager_url,
@@ -29,38 +32,16 @@ faas_manager_data ={
     "cont_or_serv_name" : cont_or_serv_name
 }
 
-def function_delete(function_id):
-    required_url = db_manager_url + dbm_api_urls["function"]["delete"]
-    delete_append_url = "/" + str(function_id)
-    required_url = required_url + delete_append_url
-    headers = {'Accept': 'text/plain'}
-    request_obj = requests.delete(required_url,  headers = headers)
+def function_execute(function_content, function_output,function_input):
+    func_data = execute_function(function_content, function_output, function_input)
+    return func_data
 
-    if request_obj.status_code == 204:
-        data = {
-            "functionId": function_id,
-            "requestStatus": "Function Deleted",
-            "result": "success"
-        }
-    elif request_obj.status_code == 500:
-        data = {
-            "functionId": function_id,
-            "requestStatus": "Function Deletion Failed - functionId Not Present - " + str(request_obj.text),
-            "result": "failure"
-        }
-    else:
-        data = {
-            "functionId": None,
-            "requestStatus": "Function Deletion Failed - " + str(request_obj.text),
-            "result": "failure"
-        }
-    return data
 
 if __name__ == "__main__":
     container_started_update = request_update(request_data,status_codes[request_type][102], "in_progress")
     if container_started_update:
-        response_data = function_delete(function_id)
-        request_update(request_data, response_data["requestStatus"], response_data["result"])
+        func_data = function_execute(function_content, function_output,function_input)
+        request_update(request_data, func_data["requestStatus"], func_data["result"] , func_data["outputData"])
         cont_or_serv_remove_logic( swarm , faas_manager_data)
     else:
         raise Exception("Fatal Exception - Request Update Failed")

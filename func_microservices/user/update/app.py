@@ -25,6 +25,12 @@ request_data ={
     "request_type" : request_type
 }
 
+faas_manager_data ={
+    "faas_manager_url" : faas_manager_url,
+    "faas_api_urls" : faas_api_urls,
+    "cont_or_serv_name" : cont_or_serv_name
+}
+
 def user_update(user_id, user_name, password):
     required_url = db_manager_url + dbm_api_urls["user"]["update"]
     data = {

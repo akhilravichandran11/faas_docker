@@ -26,6 +26,12 @@ request_data ={
     "request_type" : request_type
 }
 
+faas_manager_data ={
+    "faas_manager_url" : faas_manager_url,
+    "faas_api_urls" : faas_api_urls,
+    "cont_or_serv_name" : cont_or_serv_name
+}
+
 def function_create(function_name, function_content, user_id, user_name):
     function_name = function_name + "_" + str(random.randint(0, 9999))
     required_url = db_manager_url + dbm_api_urls["function"]["create"]

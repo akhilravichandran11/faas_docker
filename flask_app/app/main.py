@@ -13,6 +13,7 @@ from custom_util import build_response_for_missing_params,build_dict_with_base_d
 from db_manager_handler import Dbmanager , dbm_api_urls
 from constants import request_types,status_codes,container_image_names,container_names,service_image_names,service_names
 from docker_util import Dockerutil
+import func_exec
 
 app = Flask(__name__)
 
@@ -246,7 +247,7 @@ def function_delete():
         resp = traceback.format_exc()
     return resp
 
-@app.route("/function/execute" , methods = ['GET'] )
+@app.route("/function/execute" , methods = ['POST'] )
 def function_execute():
     request_type = 'execute_function'
     required_arg_keys = ["userName","password","functionId"]
@@ -256,21 +257,28 @@ def function_execute():
     try:
         request_args = request.args.to_dict(flat = True)
         if check_dict_for_mandatory_keys(request_args,required_arg_keys):
-            response_data = dbmanager.function_get(request_args["functionId"])
-            if response_data["success"]:
+            func_response_data = dbmanager.function_get(request_args["functionId"])
+            if func_response_data["success"]:
                 response_data = dbmanager.request_create(request_type, json.dumps(request_args),status_codes[request_type][101] + docker_cont_or_serv_name, "in_progress")
                 resp = Response(json.dumps(response_data), status = 200, mimetype = 'application/json' )
                 if response_data["success"]:
+                    request_json = request.json
+                    input_data = ( (request_json['input_data']) if ('input_data' in request_json) else (dict()) )
+                    output_data = ((request_json['output_data']) if ('output_data' in request_json) else (dict()))
                     data = {
-                        "FUNCTION_CONTENT": request_args["functionContent"],
-                        "FUNCTION_DATA": request.json
+                        "FUNCTION_CONTENT": func_response_data["functionContent"],
+                        "FUNCTION_OUTPUT": output_data,
+                        "FUNCTION_INPUT": input_data
                     }
+                    # response_data = func_exec.execute_function(data["FUNCTION_CONTENT"],data["FUNCTION_OUTPUT"],data["FUNCTION_INPUT"])
+                    # resp = Response(json.dumps(response_data), status=200, mimetype='application/json')
                     data.update(dict_base_data)
                     data.update(build_dict_with_request_data(docker_cont_or_serv_name, request_type, response_data["requestId"]))
+                    docker_util.run_container_or_service(swarm, docker_image_name, docker_cont_or_serv_name, data)
             else:
-                status_code = response_data["status_code"]
-                map(response_data.pop(),["status_code","success"])
-                resp = Response(json.dumps(response_data), status = status_code, mimetype='application/json')
+                status_code = func_response_data["status_code"]
+                map(func_response_data.pop(),["status_code","success"])
+                resp = Response(json.dumps(func_response_data), status = status_code, mimetype='application/json')
         else:
             resp = build_response_for_missing_params(request_types[request_type], required_arg_keys)
     except Exception as e:
