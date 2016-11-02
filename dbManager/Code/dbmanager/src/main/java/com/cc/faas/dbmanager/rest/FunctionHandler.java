@@ -51,6 +51,24 @@ public class FunctionHandler {
 		return Response.status(Status.OK).entity(Helper.convertToJsonString(functions)).build();
 
 	}
+	
+	@GET
+	@Path("/{username}/{functioname}")
+	public Response getFunctionByUserNameAndFunctionName(@PathParam("username") String username,@PathParam("functioname") String functioname) {
+
+		Function requestedFunction=null;
+		try
+		{
+			requestedFunction=functionService.getFunctionByUserNameAndFunctionName(username, functioname);
+		} catch (Exception e) {
+			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Helper.convertToJsonString(new Message(e.getMessage()))).build();
+		}
+		if(requestedFunction==null){
+			return Response.status(Status.NOT_FOUND).entity(Helper.convertToJsonString(new Message(ExceptionConstants.NAME_NOT_EXIST))).build();
+		}else{
+			return Response.status(Status.OK).entity(Helper.convertToJsonString(requestedFunction)).build();
+		}
+	}
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)

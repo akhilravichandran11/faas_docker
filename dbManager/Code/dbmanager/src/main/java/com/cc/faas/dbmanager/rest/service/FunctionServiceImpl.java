@@ -70,6 +70,16 @@ public class FunctionServiceImpl {
 		}
 		return functions;
 	}
+	public Function getFunctionByUserNameAndFunctionName(String username,String functioname) throws Exception {
+		UserEntity creator = userDao.findByName(username);
+		if(creator==null){
+			return null;
+		}
+		FunctionEntity entityInDb = functionDao.findByNameAndUserId(creator.getId(), functioname);
+		if(entityInDb==null)
+			return null;
+		return toDto(entityInDb);
+	}
 	public static FunctionEntity fromDto(Function function, UserEntity creator) {
 		FunctionEntity entity = new FunctionEntity();
 		if(function.getFunctionId() !=null && !function.getFunctionId().isEmpty()){
