@@ -55,16 +55,13 @@ def execute_function(function_content, function_output, function_input):
 		success = False
 		output_text = traceback.format_exc()
 	finally:
-		if success:
-			return_data = dict(
-				run_success=str(success),
+		run_details = ("Run was Succesfull" if (success) else "Run had Exceptions")
+		return_data = dict(
+			requestStatus=run_details,
+			result=str(dict(
 				output_text=output_text,
-				output_data=dict_output["output_data"]
-			)
-		else:
-			return_data = dict(
-				run_success=str(success),
-				exception_text=output_text,
-				output_data=dict_output["output_data"]
-			)
+				outputData=str(dict_output["output_data"])
+			)),
+			outputData=str(dict_output["output_data"])
+		)
 	return return_data
