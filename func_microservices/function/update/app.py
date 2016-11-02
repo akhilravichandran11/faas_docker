@@ -4,6 +4,7 @@ import random
 import json
 import ast
 from util import request_update,cont_or_serv_remove_logic
+from func_compile import compile_function
 
 swarm = ast.literal_eval(os.environ['SWARM'])
 db_manager_url = os.environ['DB_MANAGER_URL']
@@ -79,8 +80,12 @@ def function_update(function_id, function_name, function_content, user_id, user_
 if __name__ == "__main__":
     container_started_update = request_update(request_data,status_codes[request_type][102], "in_progress")
     if container_started_update:
-        response_data = function_update(function_id, function_name, function_content, user_id, user_name)
-        request_update(request_data, response_data["requestStatus"], response_data["result"])
+        func_compile_data = compile_function(function_content)
+        if func_compile_data["success"]:
+            response_data = function_update(function_id, function_name, function_content, user_id, user_name)
+            request_update(request_data, response_data["requestStatus"], response_data["result"])
+        else:
+            request_update(request_data, "Function Updated Failed - " + func_compile_data["requestStatus"],func_compile_data["result"])
         cont_or_serv_remove_logic( swarm , faas_manager_data)
     else:
         raise Exception("Fatal Exception - Request Update Failed")
