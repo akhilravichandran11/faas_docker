@@ -16,8 +16,8 @@ cont_or_serv_name = os.environ['CONT_OR_SERV_NAME']
 request_id = os.environ['REQUEST_ID']
 request_type = os.environ['REQUEST_TYPE']
 function_content = os.environ['FUNCTION_CONTENT']
-function_input = os.environ['FUNCTION_INPUT']
-function_output = os.environ['FUNCTION_OUTPUT']
+function_input = ast.literal_eval(os.environ['FUNCTION_INPUT'])
+function_output = ast.literal_eval(os.environ['FUNCTION_OUTPUT'])
 
 request_data ={
     "db_manager_url" : db_manager_url,

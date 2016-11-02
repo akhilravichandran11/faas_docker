@@ -3,16 +3,10 @@ import StringIO
 import contextlib
 import traceback
 
-code_test_1 = """
-def madhat_func(input_data,output_data):
-		print str(output_data['out_1'])
+main_code_post = """
+madhat_func(input_data,output_data)
 """
 
-main_code = """
-print "dude 0"
-madhat_func(input_data,output_data)
-print "dude 2"
-"""
 
 @contextlib.contextmanager
 def stdoutIO(stdout=None):
@@ -27,8 +21,10 @@ def stdoutIO(stdout=None):
 
 
 def execute_function(function_content, function_output, function_input):
-	function_content = code_test_1
-	exec_code = function_content + main_code
+	# print "function_content = " + function_content
+	# print "function_output = " + str(function_output)
+	# print "function_input = " + str(function_input)
+	exec_code = function_content + main_code_post
 	dict_output = {"output_data": function_output}
 	dict_input = {"input_data": function_input}
 	success = True
@@ -43,7 +39,10 @@ def execute_function(function_content, function_output, function_input):
 			run_details = ( "Run was Succesfull" if(success) else "Run had Exceptions" )
 			return_data = dict(
 				requestStatus = run_details,
-				result = output_text,
-				outputData = dict_output["output_data"]
-				)
+				result = str(dict(
+					output_text = output_text,
+					outputData = str(dict_output["output_data"] )
+					)),
+				outputData = str(dict_output["output_data"])
+			)
 	return return_data

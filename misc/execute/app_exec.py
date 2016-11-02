@@ -43,6 +43,13 @@ main_code = """
 madhat_func(input_data,output_data)
 """
 
+main_code_1 = """
+print "dude 0"
+print "dude type 1" + str(type(input_data))
+print str(input_data['val'])
+print "dude 2"
+"""
+
 @contextlib.contextmanager
 def stdoutIO(stdout=None):
 	old = sys.stdout
@@ -56,7 +63,9 @@ def stdoutIO(stdout=None):
 
 
 def execute_function(function_content, function_output, function_input):
-	exec_code = function_content + main_code
+	function_content = code_test_1
+	# exec_code = function_content + main_code
+	exec_code = main_code_1
 	dict_output = {"output_data": function_output}
 	dict_input = {"input_data": function_input}
 	success = True

@@ -274,6 +274,7 @@ def function_execute():
                     # resp = Response(json.dumps(response_data), status=200, mimetype='application/json')
                     data.update(dict_base_data)
                     data.update(build_dict_with_request_data(docker_cont_or_serv_name, request_type, response_data["requestId"]))
+                    # resp = json.dumps(data)
                     docker_util.run_container_or_service(swarm, docker_image_name, docker_cont_or_serv_name, data)
             else:
                 status_code = func_response_data["status_code"]
