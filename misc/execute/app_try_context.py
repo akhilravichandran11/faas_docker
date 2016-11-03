@@ -4,15 +4,19 @@ import contextlib
 import traceback
 
 code = """
+import traceback
 def madhat_func(data):
 	i = [0,1]
 	for j in i :
-		d = 1/0
 		data["val"] = data["val"]+ j
 		print "Inside Madhat " + str(data["val"])
+	d = 1/0
 """
 main_code = """
-madhat_func(data)
+try:
+	madhat_func(data)
+except Exception as e:
+	data["execption"]=traceback.format_exc()
 """
 data = {
 	"val" : 2
@@ -20,17 +24,24 @@ data = {
 resp = ""
 
 @contextlib.contextmanager
-def stdoutIO(stdout = None):
+def stdoutIO(stdout = None,stderr = None):
 	old = sys.stdout
+	olde = sys.stderr
 	if stdout is None:
 		stdout = StringIO.StringIO()
+		stderr = StringIO.StringIO()
 	sys.stdout = stdout
+	sys.stderr = stderr
 	try:
-		yield stdout
+		yield [stdout,stderr]
+	except Exception as e:
+		sys.stdout = old
+		sys.stderr = olde
 	finally:
 		sys.stdout = old
+		sys.stderr = olde
 
-
+s = ""
 try:
 	print "Before Data = " + str(data)
 	with stdoutIO() as s:
@@ -39,10 +50,15 @@ try:
 		print "Ended Context Manager"
 	print "After Data = " + str(data)
 	print "Start Output :\n" 
-	print s.getvalue()
+#	print s[0].getvalue()
+#	print s[1].getvalue()
 	print "End Output \n"
 except Exception as e:
 	print "Entered Exception :\n"
 	print traceback.format_exc()
 	print "Completed Exception \n"
-#print resp
+finally:
+	print "In Finally : "
+	print s[0].getvalue()
+#	print s[1].getvalue()
+	print "dude "

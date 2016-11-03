@@ -15,7 +15,8 @@ dbm_api_urls = {
         "create": "/dbmanager/rest/users",
         "update": "/dbmanager/rest/users",
         "delete": "/dbmanager/rest/users",
-        "auth": "/dbmanger/rest/users/auth"
+        "auth": "/dbmanager/rest/users/auth",
+        "get_id": "/dbmanager/rest/users/"
     },
     "function": {
         "get": "/dbmanager/rest/functions",
@@ -126,6 +127,63 @@ class Dbmanager:
         resp_json = json.dumps(data)
         resp = Response(resp_json, status=request_obj.status_code, mimetype='application/json')
         return resp
+
+    def user_auth(self, user_name, password):
+        required_url = self.root_url + dbm_api_urls["user"]["auth"]
+        data = {
+            "userName": user_name,
+            "password": password
+        }
+        headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+        request_obj = requests.post(required_url, data=json.dumps(data), headers=headers)
+        if request_obj.status_code == 204:
+            data = {
+                "success": True,
+                "result": "Login Succesfull"
+            }
+        elif request_obj.status_code == 400:
+            data = {
+                "success": False,
+                "result": "Login Failure - Invalid Credentials"
+            }
+        else:
+            data = {
+                "success": False,
+                "result": "Login Failure - " + " url - " + required_url + " - data - " + str(data) + "\n" + str(request_obj.text)
+            }
+        return data
+
+    def user_get_id(self,user_name):
+        required_url = self.root_url + dbm_api_urls["user"]["get_id"] + user_name
+        headers = {'Accept': 'text/plain'}
+        request_obj = requests.get(required_url, headers=headers)
+
+        if request_obj.status_code == 200:
+            request_obj_json = request_obj.json()
+            data = {
+                "userId": request_obj_json["userId"],
+                "user_name": user_name,
+                "requestStatus": "User Found",
+                "result": "success",
+                "success": True
+            }
+        elif request_obj.status_code == 404:
+            data = {
+                "userId": None,
+                "user_name": user_name,
+                "requestStatus": "User Not Found - " + str(request_obj.text),
+                "result": "failure",
+                "success": False
+            }
+        else:
+            data = {
+                "userId": None,
+                "user_name": user_name,
+                "requestStatus": "User Not Found - " + str(request_obj.text),
+                "result": "failure",
+                "success": False
+            }
+        return data
 
     def user_create(self, user_name, password):
         user_name = user_name + "_" + str(random.randint(0, 9999))

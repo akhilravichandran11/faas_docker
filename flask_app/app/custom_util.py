@@ -35,6 +35,13 @@ def check_dict_for_mandatory_keys(check_dict, keys):
     present = set(keys).issubset(check_dict)
     return present
 
+def check_dict_for_null_values(check_dict):
+    null_present = False
+    for key, value in check_dict.iteritems():
+        if (value is None) or (not value.strip()) or (not value):
+            null_present = True
+            break
+    return null_present
 
 def build_response_for_missing_params(request_type, required_arg_keys):
     resp_data = {
@@ -43,6 +50,14 @@ def build_response_for_missing_params(request_type, required_arg_keys):
         "success": False
     }
     resp = Response(json.dumps(resp_data), status=404, mimetype='application/json')
+    return resp
+
+def build_bad_response(request_type, request_status):
+    resp_data = {
+        "result": request_type + " Failed - " + str(request_status),
+        "success": False
+    }
+    resp = Response(json.dumps(resp_data), status = 404, mimetype='application/json')
     return resp
 
 

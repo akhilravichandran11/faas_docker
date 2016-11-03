@@ -9,11 +9,12 @@ import os
 
 
 import custom_util
-from custom_util import build_response_for_missing_params,build_dict_with_base_data,build_dict_with_request_data,check_dict_for_mandatory_keys
+from custom_util import build_response_for_missing_params,build_dict_with_base_data,build_dict_with_request_data,check_dict_for_mandatory_keys,build_bad_response
 from db_manager_handler import Dbmanager , dbm_api_urls
 from constants import request_types,status_codes,container_image_names,container_names,service_image_names,service_names
 from docker_util import Dockerutil
 import func_exec
+from wrap_util import validate_auth,validate_arg_keys
 
 app = Flask(__name__)
 
@@ -81,47 +82,47 @@ def request_check_status():
 
 
 @app.route("/user/create", methods = ['POST'] )
+@validate_arg_keys('create_user',["userName","password"])
 def user_create():
     request_type = 'create_user'
-    required_arg_keys = ["userName", "password"]
     docker_image_name = image_names[request_type]
     cont_or_serv_name = cont_or_serv_names[request_type]
     docker_cont_or_serv_name = docker_util.gen_random_cont_or_serv_name(swarm,cont_or_serv_name,dt_now)
     try:
         request_args = request.args.to_dict(flat = True)
-        if check_dict_for_mandatory_keys(request_args, required_arg_keys):
-            response_data = dbmanager.request_create(request_type, json.dumps(request_args), status_codes[request_type][101] + docker_cont_or_serv_name, "in_progress")
-            resp = Response(json.dumps(response_data), status = 200, mimetype = 'application/json' )
-            if response_data["success"]:
-                data = {
-                    "USER_NAME" : request_args["userName"],
-                    "PASSWORD": request_args["password"]
-                }
-                data.update(dict_base_data)
-                data.update(build_dict_with_request_data(docker_cont_or_serv_name, request_type, response_data["requestId"]))
-                docker_util.run_container_or_service(swarm,docker_image_name, docker_cont_or_serv_name, data)
-                # resp = dbmanager.user_create(data["USER_NAME"], data["PASSWORD"])
-            else:
-                resp = build_response_for_missing_params(request_types[request_type],required_arg_keys)
+        response_data = dbmanager.request_create(request_type, json.dumps(request_args), status_codes[request_type][101] + docker_cont_or_serv_name, "in_progress")
+        resp = Response(json.dumps(response_data), status = 200, mimetype = 'application/json' )
+        if response_data["success"]:
+            data = {
+                "USER_NAME" : request_args["userName"],
+                "PASSWORD": request_args["password"]
+            }
+            data.update(dict_base_data)
+            data.update(build_dict_with_request_data(docker_cont_or_serv_name, request_type, response_data["requestId"]))
+            docker_util.run_container_or_service(swarm,docker_image_name, docker_cont_or_serv_name, data)
+            # resp = dbmanager.user_create(data["USER_NAME"], data["PASSWORD"])
     except Exception as e:
         resp = traceback.format_exc()
     return resp
 
 @app.route("/user/update", methods = ['PUT'] )
+@validate_auth(dbmanager,'update_user')
+@validate_arg_keys('update_user',["userName","password"])
 def user_update():
     request_type = 'update_user'
-    required_arg_keys = ["userId","userName", "password"]
     docker_image_name = image_names[request_type]
     cont_or_serv_name = cont_or_serv_names[request_type]
     docker_cont_or_serv_name = docker_util.gen_random_cont_or_serv_name(swarm,cont_or_serv_name,dt_now)
     try:
         request_args = request.args.to_dict(flat = True)
-        if check_dict_for_mandatory_keys(request_args, required_arg_keys):
+        cur_user_name = request.headers["userName"]
+        user_data = dbmanager.user_get_id(cur_user_name)
+        if user_data["success"]:
             response_data = dbmanager.request_create(request_type, json.dumps(request_args), status_codes[request_type][101] + docker_cont_or_serv_name, "in_progress")
             resp = Response(json.dumps(response_data), status = 200, mimetype = 'application/json' )
             if response_data["success"]:
                 data = {
-                    "USER_ID": request_args["userId"],
+                    "USER_ID": user_data["userId"],
                     "USER_NAME" : request_args["userName"],
                     "PASSWORD": request_args["password"]
                 }
@@ -129,34 +130,36 @@ def user_update():
                 data.update(build_dict_with_request_data(docker_cont_or_serv_name, request_type, response_data["requestId"]))
                 docker_util.run_container_or_service(swarm, docker_image_name, docker_cont_or_serv_name, data)
                 # resp = dbmanager.user_update(data["USER_ID"],data["USER_NAME"],data["PASSWORD"])
-            else:
-                resp = build_response_for_missing_params(request_types[request_type],required_arg_keys)
+        else:
+            resp = build_bad_response(request_types[request_type], user_data["requestStatus"])
     except Exception as e:
         resp = traceback.format_exc()
     return resp
 
 @app.route("/user/delete" , methods = ['DELETE'] )
+@validate_auth(dbmanager,'delete_user')
 def user_delete():
     request_type = 'delete_user'
-    required_arg_keys = ["userName","password","userId"]
     docker_image_name = image_names[request_type]
     cont_or_serv_name = cont_or_serv_names[request_type]
     docker_cont_or_serv_name = docker_util.gen_random_cont_or_serv_name(swarm, cont_or_serv_name, dt_now)
     try:
         request_args = request.args.to_dict(flat = True)
-        if check_dict_for_mandatory_keys(request_args,required_arg_keys):
+        cur_user_name = request.headers["userName"]
+        user_data = dbmanager.user_get_id(cur_user_name)
+        if user_data["success"]:
             response_data = dbmanager.request_create(request_type, json.dumps(request_args),status_codes[request_type][101] + docker_cont_or_serv_name, "in_progress")
             resp = Response(json.dumps(response_data), status = 200, mimetype = 'application/json' )
             if response_data["success"]:
                 data = {
-                    "USER_ID": request_args["userId"]
+                    "USER_ID": user_data["userId"]
                 }
                 data.update(dict_base_data)
                 data.update(build_dict_with_request_data(docker_cont_or_serv_name, request_type, response_data["requestId"]))
                 docker_util.run_container_or_service(swarm, docker_image_name, docker_cont_or_serv_name, data)
                 # resp = dbmanager.user_delete(data["USER_ID"])
         else:
-            resp = build_response_for_missing_params(request_types[request_type], required_arg_keys)
+            resp = build_bad_response(request_types[request_type], user_data["requestStatus"])
     except Exception as e:
         resp = traceback.format_exc()
     return resp
