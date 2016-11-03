@@ -153,7 +153,8 @@ flask_app/app/docker_util.py     Make docker py calls to deploy/remove service  
 flask_app/app/func_exec.py       Sample user function execute logic         New/Modified        Ignore. Initial attempt to try execute function code
 flask_app/app/main.py            Main application to handle API gateway request         Old/Modified        REST API request/response that user interacts with to perform operations
 flask_app/app/uwsgi.ini          Additional configuration for nginx         Old
-
+flask_app/Faas_api_format.md     Added readme for Faas api request format   New
+flask_app/Function_format.md     Added readme for function format           New
 dbschema/Schema.sql         Schema file to setup the database and tables    Old         Refer to instructions in README to deploy
 
 dbManager/dbmanager.war     Archive file containing package code for Tomcat     Old/Modified    Gets deployed on tomcat to setup dbManager
