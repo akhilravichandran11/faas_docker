@@ -22,7 +22,8 @@ dbm_api_urls = {
         "get": "/dbmanager/rest/functions",
         "create": "/dbmanager/rest/functions",
         "update": "/dbmanager/rest/functions",
-        "delete": "/dbmanager/rest/functions"
+        "delete": "/dbmanager/rest/functions",
+        "get_id": "/dbmanager/rest/functions"
     }
 }
 
@@ -281,6 +282,38 @@ class Dbmanager:
             }
         resp = Response(json.dumps(data), status=request_obj.status_code, mimetype='application/json')
         return resp
+
+    def function_get_id(self,user_name,function_name):
+        required_url = self.root_url + dbm_api_urls["function"]["get_id"] + "/" + user_name + "/" + function_name
+        headers = {'Accept': 'text/plain'}
+        request_obj = requests.get(required_url, headers=headers)
+
+        if request_obj.status_code == 200:
+            request_obj_json = request_obj.json()
+            data = {
+                "userId": request_obj_json["creator"]["userId"],
+                "functionId": request_obj_json["functionId"],
+                "requestStatus": "Function For User Found",
+                "result": "success",
+                "success": True
+            }
+        elif request_obj.status_code == 404:
+            data = {
+                "userId": None,
+                "functionId": None,
+                "requestStatus": "Function For User Not Found - " + str(request_obj.text),
+                "result": "failure",
+                "success": False
+            }
+        else:
+            data = {
+                "userId": None,
+                "functionId": None,
+                "requestStatus": "Function For User Not Found - " + str(request_obj.text),
+                "result": "failure",
+                "success": False
+            }
+        return data
 
     def function_create(self, function_name, function_content, user_id, user_name):
         function_name = function_name + "_" + str(random.randint(0, 9999))

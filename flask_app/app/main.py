@@ -166,21 +166,24 @@ def user_delete():
 
 
 @app.route("/function/create" , methods = ['POST'] )
+@validate_auth(dbmanager,'create_function')
+@validate_arg_keys('create_function',["functionName"])
 def function_create():
     request_type = 'create_function'
-    required_arg_keys = ["userId", "userName","password","functionName"]
     docker_image_name = image_names[request_type]
     cont_or_serv_name = cont_or_serv_names[request_type]
     docker_cont_or_serv_name = docker_util.gen_random_cont_or_serv_name(swarm, cont_or_serv_name, dt_now)
     try:
         request_args = request.args.to_dict(flat = True)
-        if check_dict_for_mandatory_keys(request_args,required_arg_keys):
+        cur_user_name = request.headers["userName"]
+        user_data = dbmanager.user_get_id(cur_user_name)
+        if user_data["success"]:
             response_data = dbmanager.request_create(request_type, json.dumps(request_args),status_codes[request_type][101] + docker_cont_or_serv_name, "in_progress")
             resp = Response(json.dumps(response_data), status = 200, mimetype = 'application/json' )
             if response_data["success"]:
                 data = {
-                    "USER_ID" : request_args["userId"],
-                    "USER_NAME": request_args["userName"],
+                    "USER_ID" : user_data["userId"],
+                    "USER_NAME": cur_user_name,
                     "FUNCTION_NAME" : request_args["functionName"],
                     "FUNCTION_CONTENT" : request.data
                 }
@@ -189,29 +192,33 @@ def function_create():
                 docker_util.run_container_or_service(swarm, docker_image_name, docker_cont_or_serv_name, data)
                 # resp = dbmanager.function_create(data["FUNCTION_NAME"],data["FUNCTION_CONTENT"],data["USER_ID"],data["USER_NAME"])
         else:
-            resp = build_response_for_missing_params(request_types[request_type], required_arg_keys)
+            resp = build_bad_response(request_types[request_type], user_data["requestStatus"])
     except Exception as e:
         resp = traceback.format_exc()
     return resp
 
 @app.route("/function/update" , methods = ['PUT'] )
+@validate_auth(dbmanager,'update_function')
+@validate_arg_keys('update_function',["functionName"])
 def function_update():
     request_type = 'update_function'
-    required_arg_keys = ["userId", "userName","password","functionName","functionId"]
     docker_image_name = image_names[request_type]
     cont_or_serv_name = cont_or_serv_names[request_type]
     docker_cont_or_serv_name = docker_util.gen_random_cont_or_serv_name(swarm, cont_or_serv_name, dt_now)
     try:
         request_args = request.args.to_dict(flat = True)
-        if check_dict_for_mandatory_keys(request_args,required_arg_keys):
+        cur_user_name = request.headers["userName"]
+        cur_function_name = request_args["functionName"]
+        user_data = dbmanager.function_get_id(cur_user_name,cur_function_name)
+        if user_data["success"]:
             response_data = dbmanager.request_create(request_type, json.dumps(request_args),status_codes[request_type][101] + docker_cont_or_serv_name, "in_progress")
             resp = Response(json.dumps(response_data), status = 200, mimetype = 'application/json' )
             if response_data["success"]:
                 data = {
-                    "USER_ID" : request_args["userId"],
-                    "USER_NAME": request_args["userName"],
-                    "FUNCTION_ID": request_args["functionId"],
-                    "FUNCTION_NAME" : request_args["functionName"],
+                    "USER_ID" : user_data["userId"],
+                    "USER_NAME": cur_user_name,
+                    "FUNCTION_ID": user_data["functionId"],
+                    "FUNCTION_NAME" : cur_function_name,
                     "FUNCTION_CONTENT" : request.data
                 }
                 data.update(dict_base_data)
@@ -219,48 +226,56 @@ def function_update():
                 docker_util.run_container_or_service(swarm, docker_image_name, docker_cont_or_serv_name, data)
                 # resp = dbmanager.function_update(data["FUNCTION_ID"],data["FUNCTION_NAME"],data["FUNCTION_CONTENT"],data["USER_ID"],data["USER_NAME"])
         else:
-            resp = build_response_for_missing_params(request_types[request_type], required_arg_keys)
+            resp = build_bad_response(request_types[request_type], user_data["requestStatus"])
     except Exception as e:
         resp = traceback.format_exc()
     return resp
 
 @app.route("/function/delete" , methods = ['DELETE'] )
+@validate_auth(dbmanager,'delete_function')
+@validate_arg_keys('delete_function',["functionName"])
 def function_delete():
     request_type = 'delete_function'
-    required_arg_keys = ["userName","password","functionId"]
     docker_image_name = image_names[request_type]
     cont_or_serv_name = cont_or_serv_names[request_type]
     docker_cont_or_serv_name = docker_util.gen_random_cont_or_serv_name(swarm, cont_or_serv_name, dt_now)
     try:
         request_args = request.args.to_dict(flat = True)
-        if check_dict_for_mandatory_keys(request_args,required_arg_keys):
+        cur_user_name = request.headers["userName"]
+        cur_function_name = request_args["functionName"]
+        user_data = dbmanager.function_get_id(cur_user_name,cur_function_name)
+        if user_data["success"]:
             response_data = dbmanager.request_create(request_type, json.dumps(request_args),status_codes[request_type][101] + docker_cont_or_serv_name, "in_progress")
             resp = Response(json.dumps(response_data), status = 200, mimetype = 'application/json' )
             if response_data["success"]:
                 data = {
-                    "FUNCTION_ID": request_args["functionId"]
+                    "FUNCTION_ID": user_data["functionId"]
                 }
                 data.update(dict_base_data)
                 data.update(build_dict_with_request_data(docker_cont_or_serv_name, request_type, response_data["requestId"]))
                 docker_util.run_container_or_service(swarm, docker_image_name, docker_cont_or_serv_name, data)
                 # resp = dbmanager.function_delete(data["FUNCTION_ID"])
         else:
-            resp = build_response_for_missing_params(request_types[request_type], required_arg_keys)
+            resp = build_bad_response(request_types[request_type], user_data["requestStatus"])
     except Exception as e:
         resp = traceback.format_exc()
     return resp
 
 @app.route("/function/execute" , methods = ['POST'] )
+@validate_auth(dbmanager,'execute_function')
+@validate_arg_keys('execute_function',["functionName"])
 def function_execute():
     request_type = 'execute_function'
-    required_arg_keys = ["userName","password","functionId"]
     docker_image_name = image_names[request_type]
     cont_or_serv_name = cont_or_serv_names[request_type]
     docker_cont_or_serv_name = docker_util.gen_random_cont_or_serv_name(swarm, cont_or_serv_name, dt_now)
     try:
         request_args = request.args.to_dict(flat = True)
-        if check_dict_for_mandatory_keys(request_args,required_arg_keys):
-            func_response_data = dbmanager.function_get(request_args["functionId"])
+        cur_user_name = request.headers["userName"]
+        cur_function_name = request_args["functionName"]
+        user_data = dbmanager.function_get_id(cur_user_name,cur_function_name)
+        if user_data["success"]:
+            func_response_data = dbmanager.function_get(user_data["functionId"])
             if func_response_data["success"]:
                 response_data = dbmanager.request_create(request_type, json.dumps(request_args),status_codes[request_type][101] + docker_cont_or_serv_name, "in_progress")
                 resp = Response(json.dumps(response_data), status = 200, mimetype = 'application/json' )
@@ -284,7 +299,7 @@ def function_execute():
                 map(func_response_data.pop(),["status_code","success"])
                 resp = Response(json.dumps(func_response_data), status = status_code, mimetype='application/json')
         else:
-            resp = build_response_for_missing_params(request_types[request_type], required_arg_keys)
+            resp = build_bad_response(request_types[request_type], user_data["requestStatus"])
     except Exception as e:
         resp = traceback.format_exc()
     return resp
