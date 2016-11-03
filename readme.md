@@ -60,8 +60,9 @@ Nginix/Python/Flask FAAS API Gateway Setup - For user to provision requests on d
         docker run -d --name cc_flaskapp_cont -v /var/run/docker.sock:/var/run/docker.sock -p 80:80 --link dbmanager:dbmanager --restart=always cc_flaskapp
 
 Flask App is now up and listening to requests on port 80 of the manager.
-RESTful API web service details can be found at 
+RESTful API web service details can be found at - /faas_docker/flask_app/Faas_api_format.md
 User can refer to the public API doc to identify operations they want to perform.
+Function Declaration and JSON input and output data format can be found at - /faas_docker/flask_app/Function_format.md
 
 
 Private Image Registry - To host microservice images which are deployed for user request:
