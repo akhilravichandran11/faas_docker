@@ -10,7 +10,6 @@ def madhat_func(data):
 	for j in i :
 		data["val"] = data["val"]+ j
 		print "Inside Madhat " + str(data["val"])
-	d = 1/0
 """
 main_code = """
 try:
@@ -24,24 +23,16 @@ data = {
 resp = ""
 
 @contextlib.contextmanager
-def stdoutIO(stdout = None,stderr = None):
+def stdoutIO(stdout = None):
 	old = sys.stdout
-	olde = sys.stderr
 	if stdout is None:
 		stdout = StringIO.StringIO()
-		stderr = StringIO.StringIO()
 	sys.stdout = stdout
-	sys.stderr = stderr
 	try:
-		yield [stdout,stderr]
-	except Exception as e:
-		sys.stdout = old
-		sys.stderr = olde
+		yield stdout
 	finally:
 		sys.stdout = old
-		sys.stderr = olde
-
-s = ""
+output_text = ""
 try:
 	print "Before Data = " + str(data)
 	with stdoutIO() as s:
@@ -50,15 +41,14 @@ try:
 		print "Ended Context Manager"
 	print "After Data = " + str(data)
 	print "Start Output :\n" 
-#	print s[0].getvalue()
-#	print s[1].getvalue()
+	output_text = s.getvalue()
+	output_text = output_text +data["execption"]
 	print "End Output \n"
 except Exception as e:
 	print "Entered Exception :\n"
-	print traceback.format_exc()
+	output_text = traceback.format_exc()
 	print "Completed Exception \n"
 finally:
 	print "In Finally : "
-	print s[0].getvalue()
-#	print s[1].getvalue()
+	print output_text
 	print "dude "
