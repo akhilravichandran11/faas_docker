@@ -1,7 +1,6 @@
-# faas_docker
+# FaaS-Function as a Service Using Docker
 Functions as a Service Implementation Using Docker and Docker Swarm
 
-# FaaS-Function as a Service Using Docker
 
 For better view, please use the raw view to check contents
 
