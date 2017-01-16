@@ -15,7 +15,7 @@ For better view, please use the raw view to check contents
 - After the swarm is setup, the following applications/images have to be setup on the node containing the swarm manager.
 - The current setup on ThoTh lab has a manager node on VM1 and node 1(VM2), node 2(VM3), node 3(VM4) are setup as workers. Microservices are deployed on available nodes using bin packing algorithm. Services deployed on the swarm run until explicitly removed and can be deployed either in global/replicated mode.
 
-- The application contains components that are deployed to handle user requestsand manage microservice deployment on docker swarm. The instructions to deploy them are captured below:
+##The application contains components that are deployed to handle user requestsand manage microservice deployment on docker swarm. The instructions to deploy them are captured below:
 
 - Tomcat/Java/Postgres Database Manager - Provides internal RESTful APIs to manage postgres database :
 ```
