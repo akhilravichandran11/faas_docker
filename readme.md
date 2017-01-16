@@ -1,21 +1,24 @@
+# faas_docker
+Functions as a Service Implementation Using Docker and Docker Swarm
+
 # FaaS-Function as a Service Using Docker
 
 For better view, please use the raw view to check contents
 
-URL for demo video: https://www.youtube.com/watch?v=prH4kQjR5gE 
+URL for demo video: https://www.youtube.com/watch?v=prH4kQjR5gE
 
 
-Use docker to demonstrate cloud applications can be setup as a set of 
+Use docker to demonstrate cloud applications can be setup as a set of
 microservices. Allow users to save and execute python functions on JSON object
 input through a set of microservices that are deployed on demand for performing
 operations like create user, create function and execute function.
 
 The applications requires user to setup Docker swarm. Instructions to setup
 Docker swarm can be found at: https://docs.docker.com/engine/swarm/
-The applications has been tested on commodity servers running Ubuntu 14.x 
+The applications has been tested on commodity servers running Ubuntu 14.x
 with Docker swarm setup using Docker 1.13.x
 After the swarm is setup, the following applications/images have to be setup
-on the node containing the swarm manager. 
+on the node containing the swarm manager.
 
 The current setup on ThoTh lab has a manager node on VM1 and node 1(VM2), node 2(VM3),
 node 3(VM4) are setup as workers. Microservices are deployed on available nodes
@@ -117,30 +120,30 @@ func_microservices/user/create/Dockerfile   Image file to create microservice im
 
 func_microservices/user/delete/app.py       Main app to delete user     New/Modified    Contains core logic to interact with dbmanager
 func_microservices/user/delete/util.py      Helper class for user delete operation  New/Modified            Helper to manage API urls, manage environment variables passed
-func_microservices/user/delete/Dockerfile   Image file to create microservice image New/Modified            Used to create images that can be deployed on private registry 
+func_microservices/user/delete/Dockerfile   Image file to create microservice image New/Modified            Used to create images that can be deployed on private registry
 
-func_microservices/user/update/app.py   Main app to update user     New/Modified    Contains core logic to interact with dbmanager 
+func_microservices/user/update/app.py   Main app to update user     New/Modified    Contains core logic to interact with dbmanager
 func_microservices/user/update/util.py   Helper class for user update operation  New/Modified            Helper to manage API urls, manage environment variables passed
-func_microservices/user/update/Dockerfile   Image file to create microservice image New/Modified            Used to create images that can be deployed on private registry 
+func_microservices/user/update/Dockerfile   Image file to create microservice image New/Modified            Used to create images that can be deployed on private registry
 
-func_microservices/function/create/app.py   Main app to create function New/Modified    Contains core logic to interact with dbmanager 
+func_microservices/function/create/app.py   Main app to create function New/Modified    Contains core logic to interact with dbmanager
 func_microservices/function/create/util.py      Helper class for function create operation  New/Modified            Helper to manage API urls, manage environment variables passed
 func_microservices/function/create/func_compile Helper class to manage compile checks on function New/Modified  Used to check syntax errors for user defined function
-func_microservices/function/create/Dockerfile   Image file to create microservice image New/Modified            Used to create images that can be deployed on private registry 
+func_microservices/function/create/Dockerfile   Image file to create microservice image New/Modified            Used to create images that can be deployed on private registry
 
 func_microservices/function/delete/app.py   Main app to delete function New/Modified    Contains core logic to interact with dbmanager    
 func_microservices/function/delete/util.py  Helper class for function delete operation  New/Modified            Helper to manage API urls, manage environment variables passed
-func_microservices/function/delete/Dockerfile Image file to create microservice image New/Modified            Used to create images that can be deployed on private registry 
+func_microservices/function/delete/Dockerfile Image file to create microservice image New/Modified            Used to create images that can be deployed on private registry
 
 func_microservices/function/execute/app.py  Main app to execute function New/Modified    Contains core logic to execute user code, interact with dbmanager
 func_microservices/function/execute/util.py Helper class for function execute operation  New/Modified            Helper to manage API urls, manage environment variables passed
 func_microservices/function/execute/func_exec.py Helper class to manage user function execution environment  New/Modified   Used for setting up environment for executing code
-func_microservices/function/execute/Dockerfile Image file to create microservice image New/Modified            Used to create images that can be deployed on private registry 
+func_microservices/function/execute/Dockerfile Image file to create microservice image New/Modified            Used to create images that can be deployed on private registry
 
-func_microservices/function/update/app.py   Main app to update function New/Modified    Contains core logic to interact with dbmanager 
+func_microservices/function/update/app.py   Main app to update function New/Modified    Contains core logic to interact with dbmanager
 func_microservices/function/update/util.py      Helper class for function update operation  New/Modified            Helper to manage API urls, manage environment variables passed
 func_microservices/function/update/func_compile Helper class to manage compile checks on function New/Modified  Used to check syntax errors for user defined function
-func_microservices/function/update/Dockerfile   Image file to create microservice image New/Modified            Used to create images that can be deployed on private registry 
+func_microservices/function/update/Dockerfile   Image file to create microservice image New/Modified            Used to create images that can be deployed on private registry
 
 flask_app/requirements.txt      Requirements to build flask app image       Old         Needed for succesful flask app build
 flask_app/nginx.conf            Configuration for the nginx server          Old         Needed for server configuration
