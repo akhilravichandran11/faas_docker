@@ -1,3 +1,4 @@
+##For better view, please use the raw view to check contents
 - Function Declaration
   Description : Users can create any functions inside the code, But these have to be declared as global functions
   - Example:
