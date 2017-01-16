@@ -6,16 +6,14 @@ For better view, please use the raw view to check contents
 
 
 ##Summary:
-    - Use docker to demonstrate cloud applications can be setup as a set of microservices. Allow users to save and execute python functions on JSON object input through a set of microservices that are deployed on demand for performing operations like create user, create function and execute function.
-    - URL for demo video: https://www.youtube.com/watch?v=prH4kQjR5gE
+- Use docker to demonstrate cloud applications can be setup as a set of microservices. Allow users to save and execute python functions on JSON object input through a set of microservices that are deployed on demand for performing operations like create user, create function and execute function.
+- URL for demo video: https://www.youtube.com/watch?v=prH4kQjR5gE
 
 ##Requirements and Instructions:
-    - The applications requires user to setup Docker swarm. Instructions to setup Docker swarm can be found at: https://docs.docker.com/engine/swarm/
-    - The applications has been tested on commodity servers running Ubuntu 14.x with Docker swarm setup using Docker 1.13.x
-    - After the swarm is setup, the following applications/images have to be setup on the node containing the swarm manager.
-    
-    - The current setup on ThoTh lab has a manager node on VM1 and node 1(VM2), node 2(VM3), node 3(VM4) are setup as workers. Microservices are deployed on available nodes using bin packing algorithm. Services deployed on the swarm run until explicitly removed and can be deployed either in global/replicated mode.
-
+- The applications requires user to setup Docker swarm. Instructions to setup Docker swarm can be found at: https://docs.docker.com/engine/swarm/
+- The applications has been tested on commodity servers running Ubuntu 14.x with Docker swarm setup using Docker 1.13.x
+- After the swarm is setup, the following applications/images have to be setup on the node containing the swarm manager.
+- The current setup on ThoTh lab has a manager node on VM1 and node 1(VM2), node 2(VM3), node 3(VM4) are setup as workers. Microservices are deployed on available nodes using bin packing algorithm. Services deployed on the swarm run until explicitly removed and can be deployed either in global/replicated mode.
 - The application contains components that are deployed to handle user requestsand manage microservice deployment on docker swarm. The instructions to deploy them are captured below:
 
 Tomcat/Java/Postgres Database Manager - Provides internal RESTful APIs to manage postgres database :
