@@ -4,13 +4,12 @@ Functions as a Service Implementation Using Docker and Docker Swarm
 
 For better view, please use the raw view to check contents
 
-URL for demo video: https://www.youtube.com/watch?v=prH4kQjR5gE
 
 
-Use docker to demonstrate cloud applications can be setup as a set of
-microservices. Allow users to save and execute python functions on JSON object
-input through a set of microservices that are deployed on demand for performing
-operations like create user, create function and execute function.
+
+- Summary:
+    - Use docker to demonstrate cloud applications can be setup as a set of microservices. Allow users to save and execute python functions on JSON object input through a set of microservices that are deployed on demand for performing operations like create user, create function and execute function.
+    - URL for demo video: https://www.youtube.com/watch?v=prH4kQjR5gE
 
 The applications requires user to setup Docker swarm. Instructions to setup
 Docker swarm can be found at: https://docs.docker.com/engine/swarm/
