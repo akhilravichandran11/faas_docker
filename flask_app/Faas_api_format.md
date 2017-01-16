@@ -1,5 +1,5 @@
 ##For better view, please use the raw view to check contents
-- Check Request Status:
+Check Request Status:
   Description : Used to poll request status
   Example - http://localhost:80/request/check_status?requestId=8DB753A4-3A56-4175-855A-1FD12525D273
   URL - http://localhost:80/request/check_status - GET
