@@ -63,11 +63,11 @@ Functions as a Service Implementation Using Docker and Docker Swarm
         - /faas_docker/func_microservices/function-create,update,delete,execute folder and
         - /faas_docker/func_microservices/user-create,update,delete folder
         - A reference for these commands be found at /faas_docker/func_microservices/docker_build_commands.txt
-        ``
-        1. docker build -t <image-name> .
-        2. docker tag <image-name> <registry-ip-address>:5000/<image-name>
-        3. docker push <registry-ip-address>:5000/<image-name>
-        ``
+        ```
+            1. docker build -t <image-name> .
+            2. docker tag <image-name> <registry-ip-address>:5000/<image-name>
+            3. docker push <registry-ip-address>:5000/<image-name>
+        ```
 - Monitoring Service - To monitor resource utlization:
     - This uses cAdvisor collector, elasticSearch to maintain and search data, Kibana to display indexed data in elasticSearch.
     - This service is already setup on ThoThLab to monitor memory,cpu,network utilzation
