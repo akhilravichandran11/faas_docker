@@ -18,6 +18,7 @@ For better view, please use the raw view to check contents
 - The application contains components that are deployed to handle user requestsand manage microservice deployment on docker swarm. The instructions to deploy them are captured below:
 
 - Tomcat/Java/Postgres Database Manager - Provides internal RESTful APIs to manage postgres database :
+```
 1. Create container for storing Postgres data
     - docker create -v /var/lib/postgresql/data --name postgres-data busybox
 2. Run postgres image and attach the data container to bring up the postgres database
@@ -29,7 +30,7 @@ For better view, please use the raw view to check contents
     - docker build -t madhat/tomcat .
 5. To get Tomcat up and running, execute the following command once the above command is successful:
     - docker run --name dbmanager -d -p 8080:8080 --restart=always --link postgres:db madhat/tomcat
-
+```
 Db Manager is now up and running listening for requests.
 Db Manager server exposes RESTful web services for API Gateway to communicate with Db.
 RESTful API web services can be found at /faas_docker/dbManager/Database%20Manager%20Rest%20Spec%20Brief%20Overview.info
