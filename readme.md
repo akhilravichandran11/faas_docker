@@ -1,10 +1,6 @@
 # FaaS-Function as a Service Using Docker
 Functions as a Service Implementation Using Docker and Docker Swarm
 
-
-For better view, please use the raw view to check contents
-
-
 ##Summary:
 - Use docker to demonstrate cloud applications can be setup as a set of microservices. Allow users to save and execute python functions on JSON object input through a set of microservices that are deployed on demand for performing operations like create user, create function and execute function.
 - URL for demo video: https://www.youtube.com/watch?v=prH4kQjR5gE
@@ -32,14 +28,13 @@ For better view, please use the raw view to check contents
 5. To get Tomcat up and running, execute the following command once the above command is successful:
     - docker run --name dbmanager -d -p 8080:8080 --restart=always --link postgres:db madhat/tomcat
 ```
-Db Manager is now up and running listening for requests.
-Db Manager server exposes RESTful web services for API Gateway to communicate with Db.
-RESTful API web services can be found at /faas_docker/dbManager/Database%20Manager%20Rest%20Spec%20Brief%20Overview.info
-There are brief examples for user to know how the APIs are structured and how requests can be made
-User can use PostMan, DHC, ARC client extensions in Chrome and RestClient extension in Firefox
-to make REST API calls to DbManager
 
-Nginix/Python/Flask FAAS API Gateway Setup - For user to provision requests on demand on the cloud application:
+- Db Manager server exposes RESTful web services for API Gateway to communicate with Db:
+    - RESTful API web services can be found at /faas_docker/dbManager/Database%20Manager%20Rest%20Spec%20Brief%20Overview.info
+    - There are brief examples for user to know how the APIs are structured and how requests can be made by User and can use PostMan, DHC, ARC client extensions in Chrome and RestClient extension in Firefox to make REST API calls to DbManager
+
+- Nginix/Python/Flask FAAS API Gateway Setup - For user to provision requests on demand on the cloud application:
+```
 1. Build DockerFile provided in /faas_docker/flask_app/Dockerfile
     - docker build -t cc_flaskapp .
 2. Remove Existing Container(Ignore if first time install)
@@ -51,37 +46,36 @@ Nginix/Python/Flask FAAS API Gateway Setup - For user to provision requests on d
         docker run -d --name cc_flaskapp_cont -v /var/run/docker.sock:/var/run/docker.sock -p 80:80 --link dbmanager:dbmanager --restart=always --env="MODE=PROD" cc_flaskapp
     - For Local Mode
         docker run -d --name cc_flaskapp_cont -v /var/run/docker.sock:/var/run/docker.sock -p 80:80 --link dbmanager:dbmanager --restart=always cc_flaskapp
+```
 
-Flask App is now up and listening to requests on port 80 of the manager.
-RESTful API web service details can be found at - /faas_docker/flask_app/Faas_api_format.md
-User can refer to the public API doc to identify operations they want to perform.
-Function Declaration and JSON input and output data format can be found at - /faas_docker/flask_app/Function_format.md
+- Flask App can listen to requests on port 80 of the manager:
+    - RESTful API web service details can be found at - /faas_docker/flask_app/Faas_api_format.md
+    - User can refer to the public API doc to identify operations they want to perform.
+    - Function Declaration and JSON input and output data format can be found at - /faas_docker/flask_app/Function_format.md
 
+- Private Image Registry - To host microservice images which are deployed for user request:
+    - The docker registry needs to be setup with names indicated in the docker_build_commands.txt for it to function correctly
+    - This registry is already setup on the manager node on ThoThLab with the images already uploaded.
+    - The following command can be executed to setup a private registry of our own:
+        - docker run -d -p 5000:5000 --restart=always --name registry registry:2
+        - This sets up the registry container and it can be accessed through port 5000
+    - To deploy microservice images to the registry, the following commands need to be executed on
+        - /faas_docker/func_microservices/function-create,update,delete,execute folder and
+        - /faas_docker/func_microservices/user-create,update,delete folder
+        - A reference for these commands be found at /faas_docker/func_microservices/docker_build_commands.txt
+        ``
+        1. docker build -t <image-name> .
+        2. docker tag <image-name> <registry-ip-address>:5000/<image-name>
+        3. docker push <registry-ip-address>:5000/<image-name>
+        ``
+- Monitoring Service - To monitor resource utlization:
+    - This uses cAdvisor collector, elasticSearch to maintain and search data, Kibana to display indexed data in elasticSearch.
+    - This service is already setup on ThoThLab to monitor memory,cpu,network utilzation
+    - Refer to /faas_docker/Commands%20for%20monitoring%20service for commands to setup this service and change IP address to reflect the nodes where elasticSearch is actually deployed
 
-Private Image Registry - To host microservice images which are deployed for user request:
-This registry is already setup on the manager node on ThoThLab with the images already uploaded.
-The following command can be executed to setup a private registry of our own:
- docker run -d -p 5000:5000 --restart=always --name registry registry:2
- This sets up the registry container and it can be accessed through port 5000
-
-To deploy microservice images to the registry, the following commands need to be executed on
-/faas_docker/func_microservices/function-create,update,delete,execute folder and
-/faas_docker/func_microservices/user-create,update,delete folder
-A reference for these commands be found at /faas_docker/func_microservices/docker_build_commands.txt
-1. docker build -t <image-name> .
-2. docker tag <image-name> <registry-ip-address>:5000/<image-name>
-3. docker push <registry-ip-address>:5000/<image-name>
-
-The docker registry needs to be setup with names indicated in the docker_build_commands.txt for it to
-function correctly
-
-Monitoring Service - To monitor resource utlization:
-This uses cAdvisor collector, elasticSearch to maintain and search data, Kibana to display indexed data in elasticSearch.
-This service is already setup on ThoThLab to monitor memory,cpu,network utilzation
-Refer to /faas_docker/Commands%20for%20monitoring%20service for commands to setup this service and change IP address to reflect
-the nodes where elasticSearch is actually deployed
-
+###For better view, please use the raw view to check contents
 The following is a summary of all the files that are present in the repository:
+```
 Filename                                Purpose                     New/Modified/Old                   Comments
 JSON Settings for Kibana    Used to setup dashboard visualization         New              Can be ignored if user is creating custom Kibana visualizations
 DockerServiceCommands    Steps for running service thru docker py         New               Developer instructions
@@ -182,3 +176,4 @@ dbManager/Code/dbmanager/src/main/java/com/cc/faas/dbmanager/rest/dao/RequestDao
 dbManager/Code/dbmanager/src/main/java/com/cc/faas/dbmanager/rest/dao/FunctionDaoImpl.java  DAO object to manipulate Function table through Hibernate calls Old
 dbManager/Code/dbmanager/src/main/java/com/cc/faas/dbmanager/rest/dao/HibernateUtil.java    Session manager object to manage connections to the database through Hibernate  Old
 dbManager/Code/dbmanager/src/main/java/com/cc/faas/dbmanager/rest/constants/ExceptionConstants.java  Constants to create error message strings for Bad request/Internal Server error    Old
+```
